@@ -1,6 +1,7 @@
 ﻿using Blogging_Platform.Models;
 using Blogging_Platform.Repositories;
 using Blogging_Platform.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -25,9 +26,10 @@ namespace Blogging_Platform.Controllers
             this.categoryManager = categoryManager;
         }
         // GET: ArticleController
-        public ActionResult Index()
+        public async Task<ActionResult> Index()
         {
-            return View(articleManager.GetArticles());
+            var currentUser = await userManager.GetUserAsync(User);
+            return View(articleManager.GetUserArticles(currentUser.Id));
         }
 
         // GET: ArticleController/Details/5
@@ -37,12 +39,13 @@ namespace Blogging_Platform.Controllers
         }
 
         // GET: ArticleController/Create
+        [Authorize(Roles = "user")]
         public ActionResult Create()
         {
             ViewBag.CategoryId = new SelectList(dbContext.Categories, "CategoryId", "CategoryName");
             return View();
         }
-
+        [Authorize(Roles = "user")]
         // POST: ArticleController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -80,18 +83,22 @@ namespace Blogging_Platform.Controllers
         }
 
         // GET: ArticleController/Edit/5
+        [Authorize(Roles = "user")]
         public ActionResult Edit(int id)
         {
+            ViewBag.CategoryId = new SelectList(dbContext.Categories, "CategoryId", "CategoryName");
             return View(articleManager.GetArticleById(id));
         }
 
         // POST: ArticleController/Edit/5
+        [Authorize(Roles = "user")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Edit(int id, Article article)
         {
             try
             {
+                article.EditAt = DateTime.Now;
                 articleManager.EditArticle(id, article);
                 return RedirectToAction(nameof(Index));
             }
@@ -101,7 +108,9 @@ namespace Blogging_Platform.Controllers
             }
         }
 
+
         // POST: ArticleController/Delete/5
+        [Authorize(Roles = "user")]
         public ActionResult Delete(int id)
         {
             try

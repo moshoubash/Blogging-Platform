@@ -46,5 +46,12 @@ namespace Blogging_Platform.Repositories
         {
             return dbContext.Articles.ToList();
         }
+
+        List<Article> IArticleManager.GetUserArticles(string id)
+        {
+            return (from a in dbContext.Articles
+                    where a.UserId == id
+                    select a).ToList();
+        }
     }
 }

@@ -1,0 +1,26 @@
+﻿@using Blogging_Platform.Models;
+@model Article
+@{
+    ViewData["Title"] = "Details";
+}
+
+<div style="width:50%;">
+    @*Article Title*@
+    <h2>@Model.ArticleTitle</h2>
+    
+    <div style="display:flex; flex-direction:row; justify-content:space-between; align-items:center;">
+        @*Article Writer*@
+        <p>Writed by : @Model.UserFullName</p>
+
+        @*Article Created Time*@
+        <p>Created At : @Model.CreatedAt.ToString("dd/MM/yyyy")</p>
+    </div>
+    
+    @*Article Thumbnail*@
+    <img src="/ArticleThumbnails/@Model.ArticleThumbnail" width="100%"/>
+
+    <hr />
+
+    @*Article Content*@
+    <p>@Model.ArticleContent</p>
+</div>

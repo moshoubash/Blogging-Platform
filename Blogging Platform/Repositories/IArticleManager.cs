@@ -9,5 +9,6 @@ namespace Blogging_Platform.Repositories
         public void DeleteArticle(int id);
         public List<Article> GetArticles();
         public Article GetArticleById(int id);
+        public List<Article> GetUserArticles(string id);
     }
 }

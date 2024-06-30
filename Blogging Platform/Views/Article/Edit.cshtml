@@ -1,5 +1,7 @@
-﻿@{
-    ViewData["Title"] = "Create new Article";
+﻿@using Blogging_Platform.Models;
+@model Article
+@{
+    ViewData["Title"] = "Edit Article";
 }
 
 <h2>@ViewData["Title"]</h2>
@@ -7,17 +9,17 @@
 <form method="post" enctype="multipart/form-data">
     <div class="form-group">
         <label class="form-label">Article Title</label>
-        <input class="form-control" type="text" name="ArticleTitle"/>
+        <input class="form-control" type="text" name="ArticleTitle" value="@Model.ArticleTitle"/>
     </div>
 
     <div class="form-group">
         <label class="form-label">Article Thumbnail</label>
-        <input class="form-control" type="file" name="ArticleThumbnail" />
+        <input class="form-control" type="file" name="ArticleThumbnail" value="@Model.ArticleThumbnail" />
     </div>
 
     <div class="form-group">
         <label class="form-label">Article Content</label>
-        <input class="form-control" type="text" name="ArticleContent" />
+        <input class="form-control" type="text" name="ArticleContent" value="@Model.ArticleContent" />
     </div>
 
     <div class="form-group">
