@@ -15,6 +15,9 @@
         @*Article Created Time*@
         <p>Created At : @Model.CreatedAt.ToString("dd/MM/yyyy")</p>
     </div>
+
+    @*Article Category*@
+    <a class="btn btn-dark" href="/Category/Articles/@Model.CategoryId">Article category @Model.CategoryId</a>
     
     @*Article Thumbnail*@
     <img src="/ArticleThumbnails/@Model.ArticleThumbnail" width="100%"/>
@@ -22,5 +25,5 @@
     <hr />
 
     @*Article Content*@
-    <p>@Model.ArticleContent</p>
+    @Html.Raw(@Model.ArticleContent)
 </div>

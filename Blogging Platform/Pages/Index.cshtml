@@ -1,10 +1,42 @@
 ﻿@page
+@using Blogging_Platform.Repositories
+@using Blogging_Platform.Services;
+@inject IArticleManager articleManager;
 @model IndexModel
 @{
     ViewData["Title"] = "Home page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+@{
+    foreach (var article in articleManager.GetArticles())
+    {
+        <div class="card mb-3" style="max-width: 1040px;">
+            <div class="row g-0">
+                <div class="col-md-4">
+                    <img src="/ArticleThumbnails/@article.ArticleThumbnail" class="img-fluid rounded-start">
+                </div>
+                <div class="col-md-8">
+                    <div class="card-body">
+                        <a href="/Article/Details/@article.ArticleId">
+                            <h2 class="card-title">@article.ArticleTitle</h2>
+                        </a>
+                        <p class="card-text">
+                            @{
+                                if (article.ArticleContent.Length > 100)
+                                {
+                                    @Html.Raw(@article.ArticleContent.Substring(0, 100));
+                                }
+                                else 
+                                {
+                                    @Html.Raw(@article.ArticleContent);
+                                }
+                            }
+                        </p>
+                        <p class="card-text"><small class="text-muted">Created At : @article.CreatedAt.ToString("dd/MM/yyyy") by : @article.UserFullName</small></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+}
+

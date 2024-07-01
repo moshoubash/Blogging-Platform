@@ -1,5 +1,6 @@
 ﻿using Blogging_Platform.Models;
 using Blogging_Platform.Services;
+using Microsoft.EntityFrameworkCore;
 
 namespace Blogging_Platform.Repositories
 {
@@ -32,6 +33,13 @@ namespace Blogging_Platform.Repositories
         {
             var targetCategory = (from c in dbContext.Categories where c.CategoryId == id select c).FirstOrDefault();
             return targetCategory;
+        }
+
+        async Task<Category> ICategoryManager.GetCategoryWithArticlesAsync(int CategoryId)
+        {
+            return await dbContext.Categories
+                             .Include(c => c.Articles)
+                             .FirstOrDefaultAsync(c => c.CategoryId == CategoryId);
         }
     }
 }
