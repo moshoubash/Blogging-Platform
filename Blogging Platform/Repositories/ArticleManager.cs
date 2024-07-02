@@ -47,6 +47,13 @@ namespace Blogging_Platform.Repositories
             return dbContext.Articles.ToList();
         }
 
+        List<Article> IArticleManager.GetSearchArticles(string query)
+        {
+            return (from a in dbContext.Articles
+                    where a.ArticleTitle.Contains(query) || a.ArticleContent.Contains(query)
+                    select a).ToList();
+        }
+
         List<Article> IArticleManager.GetUserArticles(string id)
         {
             return (from a in dbContext.Articles

@@ -45,8 +45,8 @@ namespace Blogging_Platform.Controllers
             ViewBag.CategoryId = new SelectList(dbContext.Categories, "CategoryId", "CategoryName");
             return View();
         }
-        [Authorize(Roles = "user")]
         // POST: ArticleController/Create
+        [Authorize(Roles = "user")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Create(Article article, IFormFile ArticleThumbnail)
@@ -123,5 +123,51 @@ namespace Blogging_Platform.Controllers
                 return View();
             }
         }
+
+        [HttpGet]
+        public IActionResult Search(string query)
+        {
+            return View(articleManager.GetSearchArticles(query));
+        }
+
+        /*public async Task<ActionResult> ToggleLike(int ArticleId)
+        {
+            // Get the current user
+            var user = await userManager.GetUserAsync(User);
+            if (user == null)
+            {
+                return Unauthorized();
+            }
+
+            // check article exists
+            var targetArticle = await dbContext.Articles.FirstOrDefaultAsync(x => x.ArticleId == ArticleId);
+            if (targetArticle == null)
+            {
+                return NotFound();
+            }
+
+            // Check
+            var existingLike = await dbContext.Likes.FirstOrDefaultAsync(l => l.ArticleId == ArticleId && l.UserId == user.Id);
+
+            if (existingLike != null)
+            {
+                // already liked
+                dbContext.Likes.Remove(existingLike);
+                await dbContext.SaveChangesAsync();
+                return Redirect($"/Article/Details/{ArticleId}");
+            }
+            else
+            {
+                // User has not liked the article, so we add a new like
+                var like = new Like
+                {
+                    ArticleId = ArticleId,
+                    UserId = user.Id
+                };
+                dbContext.Likes.Add(like);
+                await dbContext.SaveChangesAsync();
+                return Redirect($"/Article/Details/{ArticleId}");
+            }
+        }*/
     }
 }
