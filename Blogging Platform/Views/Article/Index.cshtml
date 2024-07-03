@@ -1,11 +1,11 @@
 ﻿@{
     ViewData["Title"] = "List Of Articles";
+    Layout = "/Views/Shared/_UserDashboard.cshtml";
 }
 
-<h2>@ViewData["Title"]</h2>
-
-<div class="container">
-    <table class="table table-bordered">
+<div class="container pt-4">
+    <h2>@ViewData["Title"]</h2>
+    <table class="table table-striped mt-4">
         <thead>
             <tr>
                 <th>ID</th>
@@ -21,11 +21,17 @@
                     <tr>
                         <td>@x.ArticleId</td>
                         <td>@x.ArticleTitle</td>
-                        <td>@x.CreatedAt</td>
+                        <td>@x.CreatedAt.ToString("MM/dd/yyyy")</td>
                         <td>
-                            <a href="/Article/Delete/@x.ArticleId" class="btn btn-danger">Delete</a>
-                            <a href="/Article/Edit/@x.ArticleId" class="btn btn-primary">Edit</a>
-                            <a href="/Article/Details/@x.ArticleId" class="btn btn-info">Details</a>
+                            <a href="/Article/Delete/@x.ArticleId" class="btn btn-danger">
+                                <i class="fa-solid fa-trash"></i>
+                            </a>
+                            <a href="/Article/Edit/@x.ArticleId" class="btn btn-primary">
+                                <i class="fa-solid fa-pen-to-square"></i>
+                            </a>
+                            <a href="/Article/Details/@x.ArticleId" class="btn btn-dark">
+                                <i class="fa-solid fa-file"></i>
+                            </a>
                         </td>
                     </tr>    
                 }

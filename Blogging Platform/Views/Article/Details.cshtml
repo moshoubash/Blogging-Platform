@@ -2,38 +2,38 @@
 @model Article
 @{
     ViewData["Title"] = "Details";
+    Layout = "/Views/Shared/_ArticleLayout.cshtml";
 }
 
-<div style="width:50%;">
-    @*Article Title*@
-    <h2>@Model.ArticleTitle</h2>
-    
-    <div style="display:flex; flex-direction:row; justify-content:space-between; align-items:center;">
-        @*Article Writer*@
-        <p>Writed by : @Model.UserFullName</p>
+<header class="masthead" style="background-image: url('/ArticleThumbnails/@Model.ArticleThumbnail')">
+    <div class="container position-relative px-4 px-lg-5">
+        <div class="row gx-4 gx-lg-5 justify-content-center">
+            <div class="col-md-10 col-lg-8 col-xl-7">
+                <div class="post-heading">
+                    <h1>@Model.ArticleTitle</h1>
 
-        @*Article Created Time*@
-        <p>Created At : @Model.CreatedAt.ToString("dd/MM/yyyy")</p>
+                    <span class="meta">
+                        Posted by
+                        <a href="#!">@Model.UserFullName</a>
+                        on @Model.CreatedAt.ToString("dd/MM/yyyy")
+                    </span>
+                </div>
+            </div>
+        </div>
     </div>
+</header>
 
+<div class="container">
     @*Article Category*@
     <a class="btn btn-dark" href="/Category/Articles/@Model.CategoryId">Article category @Model.CategoryId</a>
-    
-    @*Article Thumbnail*@
-    <img src="/ArticleThumbnails/@Model.ArticleThumbnail" width="100%"/>
 
-    <hr />
-
-    @*Article Content*@
-    @Html.Raw(@Model.ArticleContent)
-
-    @*Article Interactions
-    <div>
-        Likes
-
-        Comments
-        
-        Replies
-
-    </div>*@
+    <article class="mb-4">
+        <div class="container px-4 px-lg-5">
+            <div class="row gx-4 gx-lg-5 justify-content-center">
+                <div class="col-md-10 col-lg-8 col-xl-7">
+                    @Html.Raw(@Model.ArticleContent)
+                </div>
+            </div>
+        </div>
+    </article>
 </div>

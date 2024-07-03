@@ -23,6 +23,7 @@
 
   <ItemGroup>
     <Folder Include="wwwroot\ArticleThumbnails\" />
+    <Folder Include="wwwroot\dashboard\" />
   </ItemGroup>
 
 </Project>
