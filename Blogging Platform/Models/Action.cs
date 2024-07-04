@@ -1,7 +1,12 @@
-﻿namespace Blogging_Platform.Models
+﻿using System.ComponentModel.DataAnnotations.Schema;
+using System.ComponentModel.DataAnnotations;
+
+namespace Blogging_Platform.Models
 {
     public class Action
     {
+        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int ActionId { get; set; }
         public string? ActionType { get; set; }
         public string? UserFullName { get; set; }

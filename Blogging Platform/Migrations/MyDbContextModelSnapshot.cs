@@ -316,13 +316,13 @@ namespace Blogging_Platform.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "7449e993-3671-417c-8a19-c0bf87afdb05",
+                            Id = "30f9b18d-7c50-4043-a1a5-b2e4f644e06b",
                             Name = "admin",
                             NormalizedName = "admin"
                         },
                         new
                         {
-                            Id = "45f6e0f0-25c8-4274-b4f9-e18d769d6ad8",
+                            Id = "124ed198-70ed-43d1-87be-57eb0193401f",
                             Name = "user",
                             NormalizedName = "user"
                         });

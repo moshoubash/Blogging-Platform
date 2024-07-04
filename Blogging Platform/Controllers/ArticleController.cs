@@ -36,7 +36,15 @@ namespace Blogging_Platform.Controllers
         // GET: ArticleController/Details/5
         public ActionResult Details(int id)
         {
-            return View(articleManager.GetArticleById(id));
+            var targetArticle = articleManager.GetArticleById(id);
+            var targetCategory = categoryManager.GetCategoryById(targetArticle.CategoryId);
+            ViewBag.ArticleCategory = targetCategory.CategoryName;
+
+            var article = dbContext.Articles
+               .Include(a => a.Likes)
+               .FirstOrDefault(a => a.ArticleId == id);
+
+            return View(article);
         }
 
         // GET: ArticleController/Create
@@ -74,6 +82,16 @@ namespace Blogging_Platform.Controllers
 
                 article.UserFullName = user.FullName;
 
+                // Add action to actions table
+                var action = new Models.Action { 
+                    ActionTime = DateTime.Now,
+                    ActionType = "Create Article",
+                    UserId = user.Id,
+                    UserFullName = user.FullName
+                };
+
+                dbContext.Actions.Add(action);
+
                 articleManager.CreateArticle(article);
                 return RedirectToAction(nameof(Index));
             }
@@ -95,10 +113,23 @@ namespace Blogging_Platform.Controllers
         [Authorize(Roles = "user")]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, Article article)
+        public async Task<ActionResult> Edit(int id, Article article)
         {
             try
             {
+                var user = await userManager.GetUserAsync(User);
+
+                // Edit action to actions table
+                var action = new Models.Action
+                {
+                    ActionTime = DateTime.Now,
+                    ActionType = "Edit Article",
+                    UserId = user.Id,
+                    UserFullName = user.FullName
+                };
+
+                dbContext.Actions.Add(action);
+
                 article.EditAt = DateTime.Now;
                 articleManager.EditArticle(id, article);
                 return RedirectToAction(nameof(Index));
@@ -112,10 +143,23 @@ namespace Blogging_Platform.Controllers
 
         // POST: ArticleController/Delete/5
         [Authorize(Roles = "user")]
-        public ActionResult Delete(int id)
+        public async Task<ActionResult> Delete(int id)
         {
             try
             {
+                var user = await userManager.GetUserAsync(User);
+
+                // Delete action to actions table
+                var action = new Models.Action
+                {
+                    ActionTime = DateTime.Now,
+                    ActionType = "Delete Article",
+                    UserId = user.Id,
+                    UserFullName = user.FullName
+                };
+
+                dbContext.Actions.Add(action);
+
                 articleManager.DeleteArticle(id);
                 return RedirectToAction(nameof(Index));
             }
@@ -131,7 +175,8 @@ namespace Blogging_Platform.Controllers
             return View(articleManager.GetSearchArticles(query));
         }
 
-        /*public async Task<ActionResult> ToggleLike(int ArticleId)
+        [Authorize]
+        public async Task<ActionResult> ToggleLike(int ArticleId)
         {
             // Get the current user
             var user = await userManager.GetUserAsync(User);
@@ -154,6 +199,18 @@ namespace Blogging_Platform.Controllers
             {
                 // already liked
                 dbContext.Likes.Remove(existingLike);
+                
+                // Delete action to actions table
+                var action = new Models.Action
+                {
+                    ActionTime = DateTime.Now,
+                    ActionType = "Remove Like",
+                    UserId = user.Id,
+                    UserFullName = user.FullName
+                };
+
+                dbContext.Actions.Add(action);
+
                 await dbContext.SaveChangesAsync();
                 return Redirect($"/Article/Details/{ArticleId}");
             }
@@ -166,9 +223,21 @@ namespace Blogging_Platform.Controllers
                     UserId = user.Id
                 };
                 dbContext.Likes.Add(like);
+                
+                // add action to actions table
+                var action = new Models.Action
+                {
+                    ActionTime = DateTime.Now,
+                    ActionType = "Add Like",
+                    UserId = user.Id,
+                    UserFullName = user.FullName
+                };
+
+                dbContext.Actions.Add(action);
+
                 await dbContext.SaveChangesAsync();
                 return Redirect($"/Article/Details/{ArticleId}");
             }
-        }*/
+        }
     }
 }
