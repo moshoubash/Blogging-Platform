@@ -77,6 +77,13 @@ namespace Blogging_Platform.Services
                 .HasOne(a => a.Article)
                 .WithMany(u => u.Tags)
                 .HasForeignKey(a => a.ArticleId);
+
+            // one-to-many
+
+            modelBuilder.Entity<Models.Action>()
+                        .HasOne(u => u.AppUser)
+                        .WithMany(a => a.Actions)
+                        .HasForeignKey(b => b.UserId);
         }
 
         public DbSet<Article> Articles { get; set;} 
@@ -85,5 +92,6 @@ namespace Blogging_Platform.Services
         public DbSet<Reply> Replies { get; set;} 
         public DbSet<Tag> Tags { get; set; }
         public DbSet<Like> Likes { get; set; }
+        public DbSet<Models.Action> Actions { get; set; }
     }
 }

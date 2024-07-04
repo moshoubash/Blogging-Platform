@@ -26,6 +26,7 @@ namespace Blogging_Platform.Controllers
             this.categoryManager = categoryManager;
         }
         // GET: ArticleController
+        [Authorize(Roles = "user")]
         public async Task<ActionResult> Index()
         {
             var currentUser = await userManager.GetUserAsync(User);

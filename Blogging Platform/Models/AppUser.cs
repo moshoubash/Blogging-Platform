@@ -11,5 +11,6 @@ namespace Blogging_Platform.Models
         public List<Comment>? Comments { get; set; }
         public List<Like>? Likes { get; set; }
         public List<Reply>? Replies { get; set; }
+        public List<Action>? Actions { get; set; }
     }
 }
