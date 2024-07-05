@@ -40,6 +40,7 @@ namespace Blogging_Platform.Controllers
         {
             var targetArticle = articleManager.GetArticleById(id);
             var targetCategory = categoryManager.GetCategoryById(targetArticle.CategoryId);
+            
             ViewBag.ArticleCategory = targetCategory.CategoryName;
             ViewBag.ArticleComments = articleManager.GetArticleComments(id);
 
@@ -326,6 +327,16 @@ namespace Blogging_Platform.Controllers
             };
 
             dbContext.Comments.Add(comment);
+
+            var action = new Models.Action {
+                ActionTime = DateTime.Now,
+                ActionType = "Add Comment",
+                UserId = user.Id,
+                UserFullName = user.FullName
+            };
+
+            dbContext.Actions.Add(action);
+
             await dbContext.SaveChangesAsync();
 
             return Redirect($"/Article/Details/{ArticleId}");
@@ -341,8 +352,17 @@ namespace Blogging_Platform.Controllers
             reply.UserId = userId;
 
             dbContext.Replies.Add(reply);
-            await dbContext.SaveChangesAsync();
 
+            var action = new Models.Action
+            {
+                ActionTime = DateTime.Now,
+                ActionType = "Add Reply",
+                UserId = user.Id,
+                UserFullName = user.FullName
+            };
+
+            dbContext.Actions.Add(action);
+            await dbContext.SaveChangesAsync();
             return Redirect($"/Article/Details/{reply.ArticleId}");
         }
     }

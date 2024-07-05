@@ -45,7 +45,7 @@ namespace Blogging_Platform.Repositories
 
         List<Comment> IArticleManager.GetArticleComments(int id)
         {
-            var comments = (from c in dbContext.Comments select c).Include(c => c.Replies).ToList();
+            var comments = (from c in dbContext.Comments where c.ArticleId == id select c).Include(c => c.Replies).ToList();
             return comments;
         }
 
