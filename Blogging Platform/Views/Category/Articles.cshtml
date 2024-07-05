@@ -1,36 +1,49 @@
 ﻿@{
     ViewData["Title"] = "Articles";
+    Layout = "/Pages/Shared/_Layout.cshtml";
 }
 
-<h1>Articles in @Model.CategoryName</h1>
-
-@foreach (var article in Model.Articles)
-{
-    <div class="card mb-3" style="max-width: 1040px;">
-        <div class="row g-0">
-            <div class="col-md-4">
-                <img src="/ArticleThumbnails/@article.ArticleThumbnail" class="img-fluid rounded-start">
-            </div>
-            <div class="col-md-8">
-                <div class="card-body">
-                    <a href="/Article/Details/@article.ArticleId" target="_blank">
-                        <h2 class="card-title">@article.ArticleTitle</h2>
-                    </a>
-                    <p class="card-text">
-                        @{
-                            if (article.ArticleContent.Length > 100)
-                            {
-                                @Html.Raw(article.ArticleContent.Substring(0, 100));
-                            }
-                            else
-                            {
-                                @Html.Raw(@article.ArticleContent);
-                            }
-                        }
-                    </p>
-                    <p class="card-text"><small class="text-muted">Created At : @article.CreatedAt.ToString("dd/MM/yyyy") by : @article.UserFullName</small></p>
+<header class="masthead" style="background-image: url('assets/img/home-bg.jpg')">
+    <div class="container position-relative px-4 px-lg-5">
+        <div class="row gx-4 gx-lg-5 justify-content-center">
+            <div class="col-md-10 col-lg-8 col-xl-7">
+                <div class="site-heading">
+                    <h1>Articles in @Model.CategoryName</h1>
                 </div>
             </div>
         </div>
     </div>
-}
+</header>
+
+<div class="container px-4 px-lg-5">
+    <div class="row gx-4 gx-lg-5 justify-content-center">
+        <div class="col-md-10 col-lg-8 col-xl-7">
+            @{
+                foreach (var article in Model.Articles)
+                {
+                    <!-- Post preview-->
+                    <div class="post-preview">
+                        <a href="/Article/Details/@article.ArticleId">
+                            <h2 class="post-title">@article.ArticleTitle</h2>
+                            <h3 class="post-subtitle">
+                                @{
+                                    if (article.ArticleContent.Length < 100)
+                                    {
+                                        Html.Raw(article.ArticleContent);
+                                    }
+                                }
+                            </h3>
+                        </a>
+                        <p class="post-meta">
+                            Posted by
+                            <a href="#!">@article.UserFullName</a>
+                            on @article.CreatedAt.ToString("MMMM dd, yyyy")
+                        </p>
+                    </div>
+                    <!-- Divider-->
+                    <hr class="my-4">
+                }
+            }
+        </div>
+    </div>
+</div>

@@ -2,25 +2,64 @@
 @model List<Article>
 @{
     ViewData["Title"] = "Search";
+    Layout = "/Pages/Shared/_Layout.cshtml";
 }
 
-<h1>Search on Articles</h1>
+<header class="masthead" style="background-image: url('assets/img/home-bg.jpg')">
+    <div class="container position-relative px-4 px-lg-5">
+        <div class="row gx-4 gx-lg-5 justify-content-center">
+            <div class="col-md-10 col-lg-8 col-xl-7">
+                <div class="site-heading">
+                    <h1>Search Articles</h1>
 
-<form method="get" action="/Article/Search">
-    <div class="form-group" style="display:flex;">
-        <input type="text" class="form-control" id="searchbar" name="query" />
-        <button type="submit" class="btn btn-dark"><i class="fa-solid fa-magnifying-glass"></i></button>
+                    <form method="get" action="/Article/Search">
+                        <div class="form-group" style="display:flex;">
+                            <input type="text" class="form-control" id="searchbar" name="query" />
+                            <button type="submit" class="btn btn-dark"><i class="fa-solid fa-magnifying-glass"></i></button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
     </div>
-</form>
+</header>
+
+
 
 @if (Model != null && Model.Any())
 {
-    <h2>Search Results:</h2>
-    @foreach (var article in Model)
-    {
-        <a href="/Article/Details/@article.ArticleId" style="text-decoration:none;">@article.ArticleTitle</a>
-        <br />
-    }
+    <div class="container px-4 px-lg-5 mt-4">
+        <div class="row gx-4 gx-lg-5 justify-content-center">
+            <div class="col-md-10 col-lg-8 col-xl-7">
+                @{
+                    foreach (var article in Model)
+                    {
+                        <!-- Post preview-->
+                        <div class="post-preview">
+                            <a href="/Article/Details/@article.ArticleId">
+                                <h2 class="post-title">@article.ArticleTitle</h2>
+                                <h3 class="post-subtitle">
+                                    @{
+                                        if (article.ArticleContent.Length < 100)
+                                        {
+                                            Html.Raw(article.ArticleContent);
+                                        }
+                                    }
+                                </h3>
+                            </a>
+                            <p class="post-meta">
+                                Posted by
+                                <a href="#!">@article.UserFullName</a>
+                                on @article.CreatedAt.ToString("MMMM dd, yyyy")
+                            </p>
+                        </div>
+                        <!-- Divider-->
+                        <hr class="my-4">
+                    }
+                }
+            </div>
+        </div>
+    </div>
 }
 else if (Model != null)
 {

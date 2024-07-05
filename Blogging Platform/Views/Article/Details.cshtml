@@ -17,6 +17,7 @@
                         <a href="#!">@Model.UserFullName</a>
                         on @Model.CreatedAt.ToString("dd/MM/yyyy")
                     </span>
+
                 </div>
             </div>
         </div>
@@ -60,7 +61,7 @@
                         foreach (var c in ViewBag.ArticleComments)
                         {
                             <dl style="display:flex; flex-direction:row;">
-                                <dt>@c.UserFullName Comment</dt>
+                                <dt class="text-secondary">@c.UserFullName Comment</dt>
                                 <dd style="margin-left:5px;">@c.CommentContent</dd>
                             </dl>
 
