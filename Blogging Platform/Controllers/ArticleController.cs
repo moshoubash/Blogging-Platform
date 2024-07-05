@@ -179,7 +179,7 @@ namespace Blogging_Platform.Controllers
             return View(articleManager.GetSearchArticles(query));
         }
 
-        [Authorize]
+        /*[Authorize]
         public async Task<ActionResult> ToggleLike(int ArticleId)
         {
             // Get the current user
@@ -242,6 +242,74 @@ namespace Blogging_Platform.Controllers
                 await dbContext.SaveChangesAsync();
                 return Redirect($"/Article/Details/{ArticleId}");
             }
+        }
+*/
+
+        [Authorize]
+        [HttpPost]
+        public async Task<JsonResult> ToggleLike(int ArticleId)
+        {
+            // Get the current user
+            var user = await userManager.GetUserAsync(User);
+            if (user == null)
+            {
+                Response.StatusCode = 401; // Unauthorized
+                return Json(new { success = false, message = "Unauthorized" });
+            }
+
+            // check article exists
+            var targetArticle = await dbContext.Articles.FirstOrDefaultAsync(x => x.ArticleId == ArticleId);
+            if (targetArticle == null)
+            {
+                return Json(new { success = false, message = "Article not found" });
+            }
+
+            // Check if the user already liked the article
+            var existingLike = await dbContext.Likes.FirstOrDefaultAsync(l => l.ArticleId == ArticleId && l.UserId == user.Id);
+
+            if (existingLike != null)
+            {
+                // already liked
+                dbContext.Likes.Remove(existingLike);
+
+                // Delete action to actions table
+                var action = new Models.Action
+                {
+                    ActionTime = DateTime.Now,
+                    ActionType = "Remove Like",
+                    UserId = user.Id,
+                    UserFullName = user.FullName
+                };
+
+                dbContext.Actions.Add(action);
+            }
+            else
+            {
+                // User has not liked the article, so we add a new like
+                var like = new Like
+                {
+                    ArticleId = ArticleId,
+                    UserId = user.Id
+                };
+                dbContext.Likes.Add(like);
+
+                // add action to actions table
+                var action = new Models.Action
+                {
+                    ActionTime = DateTime.Now,
+                    ActionType = "Add Like",
+                    UserId = user.Id,
+                    UserFullName = user.FullName
+                };
+
+                dbContext.Actions.Add(action);
+            }
+
+            await dbContext.SaveChangesAsync();
+
+            // Return the updated like count
+            var likeCount = await dbContext.Likes.CountAsync(l => l.ArticleId == ArticleId);
+            return Json(new { success = true, likeCount = likeCount });
         }
 
         [Authorize]

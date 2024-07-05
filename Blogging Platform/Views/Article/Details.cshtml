@@ -30,13 +30,22 @@
                 <div class="col-md-10 col-lg-8 col-xl-7">
                     @*Article Category*@
                     <a class="btn btn-dark" href="/Category/Articles/@Model.CategoryId">@ViewBag.ArticleCategory</a>
-                    
-                    @*Like*@
+                    @*
+                    Like
                     <form action="/Article/ToggleLike/" method="post" style="display:inline-block;">
                         <input type="hidden" name="ArticleId" value="@Model.ArticleId" />
 
                         <button type="submit" class="btn btn-primary">
                             <i class="fa-solid fa-thumbs-up"></i> @(Model.Likes?.Count ?? 0)
+                        </button>
+                    </form>
+                    *@
+
+                    @*Like*@
+                    <form id="likeForm" action="/Article/ToggleLike/" method="post" style="display:inline-block;">
+                        <input type="hidden" name="ArticleId" value="@Model.ArticleId" />
+                        <button type="submit" class="btn btn-primary" id="likeButton">
+                            <i class="fa-solid fa-thumbs-up"></i> <span id="likeCount">@(Model.Likes?.Count ?? 0)</span>
                         </button>
                     </form>
 
@@ -109,6 +118,33 @@
             </div>
         </div>
     </article>
-
-   
 </div>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $('#likeForm').submit(function (event) {
+            event.preventDefault(); // Prevent the form from submitting the traditional way
+
+            $.ajax({
+                type: "POST",
+                url: $(this).attr('action'),
+                data: $(this).serialize(),
+                success: function (response) {
+                    if (response.success) {
+                        $('#likeCount').text(response.likeCount);
+                    } else {
+                        alert(response.message);
+                    }
+                },
+                error: function (xhr, status, error) {
+                    if (xhr.status === 401) {
+                        // Redirect to login page if unauthorized
+                        window.location.href = '/Identity/Account/Login';
+                    } else {
+                        console.error("Error:", error);
+                    }
+                }
+            });
+        });
+    });
+</script>
