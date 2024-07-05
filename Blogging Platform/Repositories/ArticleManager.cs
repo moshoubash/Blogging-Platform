@@ -1,5 +1,6 @@
 ﻿using Blogging_Platform.Models;
 using Blogging_Platform.Services;
+using Microsoft.EntityFrameworkCore;
 
 namespace Blogging_Platform.Repositories
 {
@@ -40,6 +41,12 @@ namespace Blogging_Platform.Repositories
         Article IArticleManager.GetArticleById(int id)
         {
             return (from a in dbContext.Articles where a.ArticleId == id select a).FirstOrDefault();
+        }
+
+        List<Comment> IArticleManager.GetArticleComments(int id)
+        {
+            var comments = (from c in dbContext.Comments select c).Include(c => c.Replies).ToList();
+            return comments;
         }
 
         List<Article> IArticleManager.GetArticles()

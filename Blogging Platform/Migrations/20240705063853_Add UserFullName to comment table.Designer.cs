@@ -4,6 +4,7 @@ using Blogging_Platform.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Blogging_Platform.Migrations
 {
     [DbContext(typeof(MyDbContext))]
-    partial class MyDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240705063853_Add UserFullName to comment table")]
+    partial class AddUserFullNametocommenttable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -255,9 +258,6 @@ namespace Blogging_Platform.Migrations
                     b.Property<string>("ReplyContent")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("UserFullName")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("UserId")
                         .HasColumnType("nvarchar(450)");
 
@@ -322,13 +322,13 @@ namespace Blogging_Platform.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "bb61ff4c-6d55-47b4-a5be-a7f518f50268",
+                            Id = "1a2533f7-fb92-4d32-a8ef-c41e5b8aa7ad",
                             Name = "admin",
                             NormalizedName = "admin"
                         },
                         new
                         {
-                            Id = "4dcbe8e7-14db-4049-8c53-edc853999fca",
+                            Id = "f73bdb01-a487-4707-88bd-6a2c5b7ceab4",
                             Name = "user",
                             NormalizedName = "user"
                         });

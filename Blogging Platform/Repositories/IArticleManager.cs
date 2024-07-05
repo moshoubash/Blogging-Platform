@@ -1,4 +1,5 @@
 ﻿using Blogging_Platform.Models;
+using Microsoft.CodeAnalysis.FlowAnalysis.DataFlow;
 
 namespace Blogging_Platform.Repositories
 {
@@ -11,5 +12,6 @@ namespace Blogging_Platform.Repositories
         public Article GetArticleById(int id);
         public List<Article> GetUserArticles(string id);
         public List<Article> GetSearchArticles(string query);
+        public List<Comment> GetArticleComments(int id);
     }
 }

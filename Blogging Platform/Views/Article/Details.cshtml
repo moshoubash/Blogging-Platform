@@ -42,17 +42,73 @@
 
                     @*Article Content*@
                     @Html.Raw(@Model.ArticleContent)
+
+                    @*Comment*@
+                    
+                    <h3 >Comments</h3>
+                    <hr />
+                    @{
+                        foreach (var c in ViewBag.ArticleComments)
+                        {
+                            <dl style="display:flex; flex-direction:row;">
+                                <dt>@c.UserFullName Comment</dt>
+                                <dd style="margin-left:5px;">@c.CommentContent</dd>
+                            </dl>
+
+                            @*List of replies*@
+                            
+                            foreach (var r in c.Replies)
+                            {
+                                <dl style="display:flex; flex-direction:row;">
+                                    <dt>- @r.UserFullName Reply</dt>
+                                    <dd style="margin-left:5px;">@r.ReplyContent</dd>
+                                </dl>
+                            }    
+
+                            @*Add Reply*@
+
+                            <form action="/Article/AddReply/" method="post">
+                                <input type="hidden" name="ArticleId" value="@Model.ArticleId" />
+                                <input type="hidden" name="CommentId" value="@c.CommentId" />
+
+                                <div class="form-group" style="display:inline-block; max-height:40px;">
+                                    <input class="form-control" style="min-width:400px;" type="text" name="ReplyContent" placeholder="Write Reply" />
+                                </div>
+                                
+                                <button class="btn btn-primary" type="submit">Reply</button>
+                            </form>
+
+                            <hr />
+                        }
+                    }
+
+                    @*Add Comment*@
+
+                    <form action="/Article/AddComment/" method="post">
+                        <input type="hidden" name="ArticleId" value="@Model.ArticleId" />
+                        <div class="form-group" style="display:inline-block;">
+                            <label class="form-label">Write Comment</label>
+                            <input class="form-control" style="min-width:400px;" type="text" name="CommentContent" placeholder="Write Comment"/>
+                        </div>
+                        <button class="btn btn-primary" type="submit">Comment</button>
+                    </form>
+
+                    <hr />
+
+                    @*Articles from the same blogger*@
+                    <h3>Articles from @Model.UserFullName</h3>
+                    <hr />
+
+
+                    @*Articles from the same Category (recommended articles)*@
+                    <h3>Articles from @ViewBag.ArticleCategory category</h3>
+                    <hr />
+
+
                 </div>
             </div>
         </div>
     </article>
 
-    @*Interactions*@
-    
-        @*Comment*@
-        @*Reply*@
-    
-    @*Articles from the same blogger*@
-    
-    @*Articles from the same Category (recommended articles)*@
+   
 </div>

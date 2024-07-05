@@ -12,6 +12,7 @@ namespace Blogging_Platform.Models
         public DateTime CreatedAt { get; set; }
 
         // referance for User
+        public string? UserFullName { get; set; }
         public string? UserId { get; set; }
         public AppUser? AppUser { get; set; }
 

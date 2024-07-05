@@ -44,12 +44,13 @@ namespace Blogging_Platform.Controllers
         }
 
         // GET: CategoryController/Create
+        [Authorize(Roles = "admin")]
         public ActionResult Create()
         {
             return View();
         }
-
         // POST: CategoryController/Create
+        [Authorize(Roles = "admin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create(Category category)
@@ -64,9 +65,8 @@ namespace Blogging_Platform.Controllers
                 return View();
             }
         }
-
-
         // POST: CategoryController/Delete/5
+        [Authorize(Roles = "admin")]
         public ActionResult Delete(int id)
         {
             try

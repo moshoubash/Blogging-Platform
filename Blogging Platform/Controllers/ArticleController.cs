@@ -3,9 +3,11 @@ using Blogging_Platform.Repositories;
 using Blogging_Platform.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.CodeAnalysis;
 using Microsoft.EntityFrameworkCore;
 
 namespace Blogging_Platform.Controllers
@@ -39,9 +41,11 @@ namespace Blogging_Platform.Controllers
             var targetArticle = articleManager.GetArticleById(id);
             var targetCategory = categoryManager.GetCategoryById(targetArticle.CategoryId);
             ViewBag.ArticleCategory = targetCategory.CategoryName;
+            ViewBag.ArticleComments = articleManager.GetArticleComments(id);
 
             var article = dbContext.Articles
                .Include(a => a.Likes)
+               .Include(a => a.Comments)
                .FirstOrDefault(a => a.ArticleId == id);
 
             return View(article);
@@ -238,6 +242,40 @@ namespace Blogging_Platform.Controllers
                 await dbContext.SaveChangesAsync();
                 return Redirect($"/Article/Details/{ArticleId}");
             }
+        }
+
+        [Authorize]
+        public async Task<ActionResult> AddComment(int ArticleId, string CommentContent) {
+            var user = await userManager.GetUserAsync(User);
+            var userId = user.Id;
+
+            var comment = new Comment {
+                CommentContent = CommentContent,
+                CreatedAt = DateTime.Now,
+                UserId = userId.ToString(),
+                ArticleId = ArticleId,
+                UserFullName = user.FullName
+            };
+
+            dbContext.Comments.Add(comment);
+            await dbContext.SaveChangesAsync();
+
+            return Redirect($"/Article/Details/{ArticleId}");
+        }
+
+        [Authorize]
+        public async Task<ActionResult> AddReply(Reply reply) { 
+            var user = await userManager.GetUserAsync(User);
+            var userId = user.Id;
+
+            reply.CreatedAt = DateTime.Now;
+            reply.UserFullName = user.FullName;
+            reply.UserId = userId;
+
+            dbContext.Replies.Add(reply);
+            await dbContext.SaveChangesAsync();
+
+            return Redirect($"/Article/Details/{reply.ArticleId}");
         }
     }
 }
