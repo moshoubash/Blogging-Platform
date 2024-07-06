@@ -1,85 +1,90 @@
 ﻿@{
     ViewData["Title"] = "Create new Article";
+    Layout = "/Views/Shared/_CreateEditLayout.cshtml";
 }
 
-<h2>@ViewData["Title"]</h2>
+<form method="post" onsubmit="fn()" enctype="multipart/form-data" style="min-height:90vh;">
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group">
+                <label class="form-label">Article Content</label>
 
-<form method="post" onsubmit="fn()" enctype="multipart/form-data">
-    <div class="form-group">
-        <label class="form-label">Article Title</label>
-        <input class="form-control" type="text" name="ArticleTitle"/>
-    </div>
+                <div id="toolbar-container">
+                    <span class="ql-formats">
+                        <select class="ql-font"></select>
+                        <select class="ql-size"></select>
+                    </span>
+                    <span class="ql-formats">
+                        <button class="ql-bold"></button>
+                        <button class="ql-italic"></button>
+                        <button class="ql-underline"></button>
+                        <button class="ql-strike"></button>
+                    </span>
+                    <span class="ql-formats">
+                        <select class="ql-color"></select>
+                        <select class="ql-background"></select>
+                    </span>
+                    <span class="ql-formats">
+                        <button class="ql-script" value="sub"></button>
+                        <button class="ql-script" value="super"></button>
+                    </span>
+                    <span class="ql-formats">
+                        <button class="ql-header" value="1"></button>
+                        <button class="ql-header" value="2"></button>
+                        <button class="ql-blockquote"></button>
+                        <button class="ql-code-block"></button>
+                    </span>
+                    <span class="ql-formats">
+                        <button class="ql-list" value="ordered"></button>
+                        <button class="ql-list" value="bullet"></button>
+                        <button class="ql-indent" value="-1"></button>
+                        <button class="ql-indent" value="+1"></button>
+                    </span>
+                    <span class="ql-formats">
+                        <button class="ql-direction" value="rtl"></button>
+                        <select class="ql-align"></select>
+                    </span>
+                    <span class="ql-formats">
+                        <button class="ql-link"></button>
+                        <button class="ql-image"></button>
+                        <button class="ql-video"></button>
+                        <button class="ql-formula"></button>
+                    </span>
+                    <span class="ql-formats">
+                        <button class="ql-clean"></button>
+                    </span>
+                </div>
 
-    <div class="form-group">
-        <label class="form-label">Article Thumbnail</label>
-        <input class="form-control" type="file" name="ArticleThumbnail" />
-    </div>
+                <div id="editor"></div>
 
-    <div class="form-group">
-        <label class="form-label">Article Content</label>
-        
-        <div id="toolbar-container">
-            <span class="ql-formats">
-                <select class="ql-font"></select>
-                <select class="ql-size"></select>
-            </span>
-            <span class="ql-formats">
-                <button class="ql-bold"></button>
-                <button class="ql-italic"></button>
-                <button class="ql-underline"></button>
-                <button class="ql-strike"></button>
-            </span>
-            <span class="ql-formats">
-                <select class="ql-color"></select>
-                <select class="ql-background"></select>
-            </span>
-            <span class="ql-formats">
-                <button class="ql-script" value="sub"></button>
-                <button class="ql-script" value="super"></button>
-            </span>
-            <span class="ql-formats">
-                <button class="ql-header" value="1"></button>
-                <button class="ql-header" value="2"></button>
-                <button class="ql-blockquote"></button>
-                <button class="ql-code-block"></button>
-            </span>
-            <span class="ql-formats">
-                <button class="ql-list" value="ordered"></button>
-                <button class="ql-list" value="bullet"></button>
-                <button class="ql-indent" value="-1"></button>
-                <button class="ql-indent" value="+1"></button>
-            </span>
-            <span class="ql-formats">
-                <button class="ql-direction" value="rtl"></button>
-                <select class="ql-align"></select>
-            </span>
-            <span class="ql-formats">
-                <button class="ql-link"></button>
-                <button class="ql-image"></button>
-                <button class="ql-video"></button>
-                <button class="ql-formula"></button>
-            </span>
-            <span class="ql-formats">
-                <button class="ql-clean"></button>
-            </span>
+                <input type="hidden" name="ArticleContent" id="inputValue" />
+            </div>
         </div>
+    
+        <div class="col-md-6" id="second-col">
+            <div class="form-group">
+                <label class="form-label">Article Title</label>
+                <input class="form-control" type="text" name="ArticleTitle" required/>
+            </div>
 
-        <div id="editor"></div>
+            <div class="form-group">
+                <label class="form-label">Article Thumbnail</label>
+                <input class="form-control" type="file" name="ArticleThumbnail" />
+            </div>
 
-        <input type="hidden" name="ArticleContent" id="inputValue" />
+            <div class="form-group">
+                <label class="control-label">Article Category</label>
+                <select class="form-control" name="CategoryId">
+                    @foreach (var item in ViewBag.CategoryId)
+                    {
+                        <option value="@item.Value">@item.Text</option>
+                    }
+                </select>
+            </div>
+
+            <button type="submit" class="btn btn-primary mt-4">Submit</button>
+        </div>
     </div>
-
-    <div class="form-group">
-        <label class="control-label">Article Category</label>
-        <select class="form-control" name="CategoryId">
-            @foreach (var item in ViewBag.CategoryId)
-            {
-                <option value="@item.Value">@item.Text</option>
-            }
-        </select>
-    </div>
-
-    <button type="submit" class="btn btn-primary mt-4">Submit</button>
 </form>
 
 <!-- Initialize Quill editor -->
