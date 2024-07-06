@@ -7,7 +7,7 @@
 namespace Blogging_Platform.Migrations
 {
     /// <inheritdoc />
-    public partial class ConfigureappuserandAddCountriestable : Migration
+    public partial class FixGender : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -16,8 +16,7 @@ namespace Blogging_Platform.Migrations
                 name: "Gender",
                 table: "AspNetUsers",
                 type: "nvarchar(max)",
-                nullable: false,
-                defaultValue: false);
+                nullable: true);
         }
 
         /// <inheritdoc />

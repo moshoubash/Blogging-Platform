@@ -25,6 +25,7 @@ namespace Blogging_Platform
 
             builder.Services.AddTransient<IArticleManager, ArticleManager>();
             builder.Services.AddTransient<ICategoryManager, CategoryManager>();
+            builder.Services.AddTransient<IUserRepository, UserRepository>();
 
             var app = builder.Build();
 

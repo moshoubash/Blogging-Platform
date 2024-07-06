@@ -14,7 +14,7 @@ namespace Blogging_Platform.Models
         public string? ProfilePicture { get; set; }
         public string? Bio { get; set; }
         public int Age { get; set; }
-        public bool Gender { get; set; }
+        public string? Gender { get; set; }
         public string? Country { get; set; }
 
         public List<Article>? Articles { get; set; }
