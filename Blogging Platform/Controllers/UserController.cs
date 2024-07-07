@@ -64,6 +64,9 @@ namespace Blogging_Platform.Controllers
 
                     currentUser.ProfilePicture = guid + ProfilePicture.FileName;
                 }
+                else {
+                    currentUser.ProfilePicture = "f5159dbc-0166-4ef6-838b-98e236a401c140010.jpg";
+                }
 
                 var user = await userManager.GetUserAsync(User);
 
@@ -100,8 +103,26 @@ namespace Blogging_Platform.Controllers
         // /User/Profile/{UserId}
         public ActionResult Profile(string? Id)
         {
+            ViewBag.UserArticles = (from a in dbContext.Articles where a.UserId == Id select a).ToList();
+
             var targetUser = dbContext.Users.FirstOrDefault(u => u.Id == Id);
+
+            if (targetUser == null) {
+                return NotFound();
+            }
+
             return View(targetUser);
+        }
+        
+        [HttpPost]
+        public ActionResult Follow(string? Id) {
+            return View();
+        }
+
+        [HttpPost]
+        public ActionResult UnFollow(string? Id)
+        {
+            return View();
         }
 
     }

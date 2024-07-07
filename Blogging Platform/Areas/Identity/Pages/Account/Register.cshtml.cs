@@ -75,8 +75,7 @@ namespace Blogging_Platform.Areas.Identity.Pages.Account
             [Display(Name = "Full Name")]
             public string FullName { get; set; }
 
-            [Required]
-            [Display(Name = "Phone Nu,ber")]
+            [Display(Name = "Phone Number")]
             public string PhoneNumber { get; set; }
 
             [Required]

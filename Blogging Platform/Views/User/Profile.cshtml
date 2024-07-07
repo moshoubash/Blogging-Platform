@@ -2,7 +2,71 @@
 @model AppUser
 @{
     ViewData["Title"] = "Profile";
+    Layout = "/Pages/Shared/_Layout.cshtml";
 }
 
-<h1>Profile</h1>
-<h2>@Model.FullName</h2>
+<header class="masthead" style="background-image: url('/assets/img/galaxywallpaper.jpg');">
+    <div class="container position-relative">
+        <div class="row gx-4 gx-lg-5 justify-content-center">
+            <div class="col-md-10 col-lg-8 col-xl-7">
+                <div class="site-heading">
+                    <img id="profile-picture" src="/ProfilePictures/@Model.ProfilePicture" />
+                    <h2>@Model.FullName</h2>
+                    <span style="font-size:2.2rem;">@Model.Bio</span>
+                    
+                    <br />
+                    <br />
+
+                    <h4><i class="fa-solid fa-envelope"></i> @Model.Email</h4>
+                    <h4><i class="fa-solid fa-location-dot"></i> @Model.Country</h4>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-6">
+            <h2>@Model.FullName Articles</h2>
+            <hr />
+            @{
+                foreach (var article in ViewBag.UserArticles)
+                {
+                    <!-- Post preview-->
+                    <div class="post-preview">
+                        <a href="/Article/Details/@article.ArticleId">
+                            <h2 class="post-title">@article.ArticleTitle</h2>
+                            <h3 class="post-subtitle">
+                                @{
+                                    if (article.ArticleContent.Length < 100)
+                                    {
+                                        Html.Raw(article.ArticleContent);
+                                    }
+                                }
+                            </h3>
+                        </a>
+                        <p class="post-meta">
+                            Posted on
+                            @article.CreatedAt.ToString("MMMM dd, yyyy")
+                        </p>
+                    </div>
+                    <!-- Divider-->
+                    <hr class="my-4">
+                }
+            }
+        </div>
+    </div>
+</div>
+
+@*
+if(user already follow then)
+<a href="/User/UnFollow/@Model.Id" class="btn btn-dark">
+- UnFollow
+</a>
+
+else()
+<a href="/User/Follow/@Model.Id" class="btn btn-dark">
++ Follow
+</a>
+*@

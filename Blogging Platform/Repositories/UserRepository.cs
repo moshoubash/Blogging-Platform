@@ -23,11 +23,16 @@ namespace Blogging_Platform.Repositories
             targetUser.Bio = appUser.Bio;
             targetUser.PhoneNumber = appUser.PhoneNumber;
             targetUser.Email = appUser.Email;
-            targetUser.Country = appUser.Country;
+
+            var targetCountry = (from c in dbContext.Countries where c.Id.ToString() == appUser.Country select c).FirstOrDefault();
+            targetUser.Country = targetCountry.Name;
+
             targetUser.FirstName = appUser.FirstName;
             targetUser.LastName = appUser.LastName;
             targetUser.FullName = appUser.FullName;
-            
+            targetUser.ProfilePicture = appUser.ProfilePicture;
+            targetUser.Gender = appUser.Gender;
+
             dbContext.SaveChanges();
         }
     }
