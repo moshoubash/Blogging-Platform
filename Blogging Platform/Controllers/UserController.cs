@@ -46,6 +46,7 @@ namespace Blogging_Platform.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         public async Task<ActionResult> Settings(AppUser currentUser, IFormFile ProfilePicture)
         {
             try
@@ -96,8 +97,12 @@ namespace Blogging_Platform.Controllers
         }
 
         // show user information and articles
-        public ActionResult Profile() {
-            return View();
+        // /User/Profile/{UserId}
+        public ActionResult Profile(string? Id)
+        {
+            var targetUser = dbContext.Users.FirstOrDefault(u => u.Id == Id);
+            return View(targetUser);
         }
+
     }
 }
