@@ -38,8 +38,18 @@ namespace Blogging_Platform.Controllers
             ViewBag.ArticlesNumber = dbContext.Articles.Where(a => a.UserId == CurrentUser.Id).ToList().Count;
             ViewBag.FollowersNumber = dbContext.Follows.Where(f => f.FolloweeId == CurrentUser.Id).ToList().Count;
             ViewBag.ActionsNumber = dbContext.Actions.Where(a => a.UserId == CurrentUser.Id).ToList().Count;
-            /*ViewBag.ArticlesViewsNumber = ;*/
 
+            /*Calculate articles views*/
+
+            var userArticles = dbContext.Articles.Where(a => a.UserId == CurrentUser.Id).ToList();
+            int Counter = 0;
+            foreach (var x in userArticles) {
+                if (x.ViewCount != 0) {
+                    Counter += x.ViewCount;
+                }
+            }
+            ViewBag.ArticlesViewsNumber = Counter;
+            
             return View();
         }
 
@@ -177,6 +187,16 @@ namespace Blogging_Platform.Controllers
 
             await dbContext.SaveChangesAsync();
             return Redirect($"/User/Profile/{id}");
+        }
+
+        [HttpGet]
+        [Authorize]
+        public async Task<ActionResult> Followers()
+        {
+            var currentUser = await userManager.GetUserAsync(User);
+            var list = dbContext.Follows.Where(f => f.FolloweeId == currentUser.Id).ToList();
+
+            return View();
         }
     }
 }
