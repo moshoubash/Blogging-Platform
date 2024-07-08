@@ -31,17 +31,7 @@
                 <div class="col-md-10 col-lg-8 col-xl-7">
                     @*Article Category*@
                     <a class="btn btn-dark" href="/Category/Articles/@Model.CategoryId">@ViewBag.ArticleCategory</a>
-                    @*
-                    Like
-                    <form action="/Article/ToggleLike/" method="post" style="display:inline-block;">
-                        <input type="hidden" name="ArticleId" value="@Model.ArticleId" />
-
-                        <button type="submit" class="btn btn-primary">
-                            <i class="fa-solid fa-thumbs-up"></i> @(Model.Likes?.Count ?? 0)
-                        </button>
-                    </form>
-                    *@
-
+                    
                     @*Like*@
                     <form id="likeForm" action="/Article/ToggleLike/" method="post" style="display:inline-block;">
                         <input type="hidden" name="ArticleId" value="@Model.ArticleId" />
@@ -106,15 +96,27 @@
                     <hr />
 
                     @*Articles from the same blogger*@
-                    <h3>Articles from @Model.UserFullName</h3>
+                    
+                    <h2>Articles from @Model.UserFullName</h2>
                     <hr />
-
+                    @{
+                        foreach (var a in ViewBag.UserArticles)
+                        {
+                            <a href="/Article/Details/@a.ArticleId"><h3>@a.ArticleTitle</h3></a>
+                            <hr />
+                        }
+                    }
 
                     @*Articles from the same Category (recommended articles)*@
-                    <h3>Articles from @ViewBag.ArticleCategory category</h3>
+                    <h2>Articles from @ViewBag.ArticleCategory category</h2>
                     <hr />
-
-
+                    @{
+                        foreach (var a in ViewBag.CategoryArticles)
+                        {
+                            <a href="/Article/Details/@a.ArticleId"><h3>@a.ArticleTitle</h3></a>
+                            <hr />
+                        }
+                    }
                 </div>
             </div>
         </div>

@@ -41,3 +41,18 @@ body {
 .ql-ui {
     display: none;
 }
+
+#add-button {
+    background-color: black;
+    padding:5px 10px;
+    border-radius:20px;
+    transition: .5s;
+    cursor: pointer;
+    font-size: 1.2rem;
+    border: 2px solid black;
+}
+
+#add-button:hover {
+    color: black;
+    background-color: white;
+}

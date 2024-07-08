@@ -1,6 +1,7 @@
 ﻿using Blogging_Platform.Models;
 using Blogging_Platform.Repositories;
 using Blogging_Platform.Services;
+using Blogging_Platform.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
@@ -36,13 +37,23 @@ namespace Blogging_Platform.Controllers
         }
 
         // GET: ArticleController/Details/5
-        public ActionResult Details(int id)
+        public async Task<ActionResult> Details(int id)
         {
             var targetArticle = articleManager.GetArticleById(id);
             var targetCategory = categoryManager.GetCategoryById(targetArticle.CategoryId);
             
             ViewBag.ArticleCategory = targetCategory.CategoryName;
             ViewBag.ArticleComments = articleManager.GetArticleComments(id);
+
+            var categoryViewModel = new CategoryViewModel
+            {
+                CategoryId = targetCategory.CategoryId,
+                CategoryName = targetCategory.CategoryName,
+                Articles = targetCategory.Articles
+            };
+
+            ViewBag.UserArticles = (from a in dbContext.Articles where a.UserId == targetArticle.UserId select a).ToList();
+            ViewBag.CategoryArticles = categoryViewModel.Articles;
 
             var article = dbContext.Articles
                .Include(a => a.Likes)

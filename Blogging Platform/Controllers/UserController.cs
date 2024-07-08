@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Claims;
 
 namespace Blogging_Platform.Controllers
 {
@@ -104,26 +105,70 @@ namespace Blogging_Platform.Controllers
         public ActionResult Profile(string? Id)
         {
             ViewBag.UserArticles = (from a in dbContext.Articles where a.UserId == Id select a).ToList();
+            ViewBag.FollowersCount = dbContext.Follows.Where(f => f.FolloweeId == Id).ToList().Count;
+            ViewBag.ArticlesCount = (from a in dbContext.Articles where a.UserId == Id select a).ToList().Count;
 
             var targetUser = dbContext.Users.FirstOrDefault(u => u.Id == Id);
 
             if (targetUser == null) {
-                return NotFound();
+                return NotFound("maybe you try to access information that dosen't exist!");
             }
 
             return View(targetUser);
         }
-        
-        [HttpPost]
-        public ActionResult Follow(string? Id) {
-            return View();
-        }
 
         [HttpPost]
-        public ActionResult UnFollow(string? Id)
+        [Authorize]
+        public async Task<IActionResult> Follow(string? id)
         {
-            return View();
-        }
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier); // current user
 
+            if (id == null || userId == id)
+            {
+                return BadRequest("Invalid user id or you cannot follow yourself.");
+            }
+
+            var follow = await dbContext.Follows
+                .FirstOrDefaultAsync(f => f.FollowerId == userId && f.FolloweeId == id);
+
+            if (follow == null)
+            {
+                // Follow logic
+                follow = new Follow
+                {
+                    FollowerId = userId,
+                    FolloweeId = id
+                };
+
+                dbContext.Follows.Add(follow);
+
+                var action = new Models.Action
+                {
+                    ActionTime = DateTime.Now,
+                    ActionType = "Follow",
+                    UserId = userId,
+                    UserFullName = (from u in dbContext.Users where u.Id == userId select u).FirstOrDefault().FullName
+                };
+                dbContext.Actions.Add(action);
+            }
+            else
+            {
+                ViewBag.UserAlreadyLike = true;
+                // Unfollow logic
+                dbContext.Follows.Remove(follow);
+
+                var action = new Models.Action
+                {
+                    ActionTime = DateTime.Now,
+                    ActionType = "Unfollow",
+                    UserId = userId,
+                    UserFullName = (from u in dbContext.Users where u.Id == userId select u).FirstOrDefault().FullName
+                };
+                dbContext.Actions.Add(action);
+            }
+
+            await dbContext.SaveChangesAsync();
+            return Redirect($"/User/Profile/{id}");
+        }
     }
 }

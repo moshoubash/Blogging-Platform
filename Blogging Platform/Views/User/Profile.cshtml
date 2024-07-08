@@ -8,12 +8,31 @@
 <header class="masthead" style="background-image: url('/assets/img/galaxywallpaper.jpg');">
     <div class="container position-relative">
         <div class="row gx-4 gx-lg-5 justify-content-center">
-            <div class="col-md-10 col-lg-8 col-xl-7">
+            <div class="col-md-10">
                 <div class="site-heading">
                     <img id="profile-picture" src="/ProfilePictures/@Model.ProfilePicture" />
                     <h2>@Model.FullName</h2>
                     <span style="font-size:2.2rem;">@Model.Bio</span>
                     
+                    <br />
+
+                    @*Follow and Unfollow*@
+                    @{
+                        if (ViewBag.UserAlreadyLike == true) {
+                            <form asp-action="Follow" asp-controller="User" method="post">
+                                <input type="hidden" name="id" value="@Model.Id" />
+                                <button type="submit" class="btn btn-dark" id="add-button">Unfollow</button>
+                            </form>
+                        }
+
+                        else {
+                            <form asp-action="Follow" asp-controller="User" method="post">
+                                <input type="hidden" name="id" value="@Model.Id" />
+                                <button type="submit" class="btn btn-dark" id="add-button">Follow</button>
+                            </form>
+                        }
+                    }
+
                     <br />
                     <br />
 
@@ -56,17 +75,10 @@
                 }
             }
         </div>
+        <div class="col"></div>
+        <div class="col">
+            <h4><i class="fa-solid fa-person"></i> @ViewBag.FollowersCount Followers</h4>
+            <h4><i class="fa-solid fa-newspaper"></i> @ViewBag.ArticlesCount Articles</h4>
+        </div>
     </div>
 </div>
-
-@*
-if(user already follow then)
-<a href="/User/UnFollow/@Model.Id" class="btn btn-dark">
-- UnFollow
-</a>
-
-else()
-<a href="/User/Follow/@Model.Id" class="btn btn-dark">
-+ Follow
-</a>
-*@

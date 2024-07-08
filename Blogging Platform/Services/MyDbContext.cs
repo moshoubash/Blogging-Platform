@@ -94,5 +94,6 @@ namespace Blogging_Platform.Services
         public DbSet<Like> Likes { get; set; }
         public DbSet<Models.Action> Actions { get; set; }
         public DbSet<Country> Countries { get; set; }
+        public DbSet<Follow> Follows { get; set; }
     }
 }
