@@ -9,6 +9,13 @@
     <link rel="stylesheet" href="~/Blogging_Platform.styles.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/dashboard/css/styles.css" />
 
+    @*Styles*@
+    <style>
+        .container-fluid{
+            padding: 10px 20px;
+        }
+    </style>
+
     @*QuillJS*@
     <link rel="stylesheet" href="~/lib/quill/atom-one-dark.min.css" />
     <link rel="stylesheet" href="~/lib/quill/katex.min.css" />
@@ -50,7 +57,7 @@
                         @*Pages*@
                         <div class="sb-sidenav-menu-heading">Pages</div>
 
-                        <a class="nav-link collapsed" href="/Article/Index" data-bs-toggle="collapse" data-bs-target="#collapsePages" aria-expanded="false" aria-controls="collapsePages">
+                        <a class="nav-link collapsed" href="/Article/Index">
                             <div class="sb-nav-link-icon">
                                 <i class="fa-solid fa-list"></i>
                             </div>
@@ -60,7 +67,7 @@
                         @*Profile*@
                         <div class="sb-sidenav-menu-heading">Profile</div>
 
-                        <a class="nav-link collapsed" href="/User/Settings" data-bs-toggle="collapse" data-bs-target="#collapsePages" aria-expanded="false" aria-controls="collapsePages">
+                        <a class="nav-link collapsed" href="/User/Settings">
                             <div class="sb-nav-link-icon">
                                 <i class="fa-solid fa-gear"></i>
                             </div>
@@ -69,13 +76,13 @@
                     </div>
                 </div>
                 <div class="sb-sidenav-footer">
-                    <div class="small">Logged in as:</div>
+                    <div class="small">Logged in as: </div>
                 </div>
             </nav>
         </div>
         <div id="layoutSidenav_content">
             <main>
-                <div class="container-fluid px-4">
+                <div class="container-fluid">
                     @RenderBody()
                 </div>
             </main>

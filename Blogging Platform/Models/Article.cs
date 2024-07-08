@@ -13,6 +13,7 @@ namespace Blogging_Platform.Models
         public DateTime CreatedAt { get; set; }
         public DateTime EditAt { get; set; }
         public string? UserFullName { get; set; }
+        public int ViewCount { get; set; }
 
         // reference for AppUser class
         public string? UserId { get; set; } 

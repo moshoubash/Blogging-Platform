@@ -60,6 +60,10 @@ namespace Blogging_Platform.Controllers
                .Include(a => a.Comments)
                .FirstOrDefault(a => a.ArticleId == id);
 
+            article.ViewCount++;
+            dbContext.Update(article);
+            await dbContext.SaveChangesAsync();
+
             return View(article);
         }
 

@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using NuGet.Common;
 using System.Security.Claims;
 
 namespace Blogging_Platform.Controllers
@@ -30,8 +31,15 @@ namespace Blogging_Platform.Controllers
         // GET: UserController
         // show analysis of the user account
         [Authorize]
-        public ActionResult Dashboard()
+        public async Task<ActionResult> Dashboard()
         {
+            var CurrentUser = await userManager.GetUserAsync(User);
+
+            ViewBag.ArticlesNumber = dbContext.Articles.Where(a => a.UserId == CurrentUser.Id).ToList().Count;
+            ViewBag.FollowersNumber = dbContext.Follows.Where(f => f.FolloweeId == CurrentUser.Id).ToList().Count;
+            ViewBag.ActionsNumber = dbContext.Actions.Where(a => a.UserId == CurrentUser.Id).ToList().Count;
+            /*ViewBag.ArticlesViewsNumber = ;*/
+
             return View();
         }
 
