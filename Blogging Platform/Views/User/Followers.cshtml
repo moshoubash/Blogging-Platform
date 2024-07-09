@@ -1,0 +1,34 @@
+﻿@using Blogging_Platform.Models;
+@model List<AppUser>
+@{
+    ViewData["Title"] = "Followers";
+    Layout = "/Views/Shared/_UserDashboard.cshtml";
+}
+
+<h1>Followers</h1>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Picture</th>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>Country</th>
+            <th>Profile</th>
+        </tr>
+    </thead>
+    <tbody>
+        @{
+            foreach (var u in Model)
+            {
+                <tr>
+                    <td><img src="/ProfilePictures/@u.ProfilePicture" width="50px"/></td>
+                    <td>@u.FirstName</td>
+                    <td>@u.LastName</td>
+                    <td>@u.Country</td>
+                    <td><a href="/User/Profile/@u.Id" class="btn btn-dark">Visit</a></td>
+                </tr>    
+            }
+        }
+    </tbody>
+</table>

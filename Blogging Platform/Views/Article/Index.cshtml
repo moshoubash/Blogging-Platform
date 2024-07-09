@@ -11,6 +11,7 @@
                 <th>ID</th>
                 <th>Title</th>
                 <th>Created At</th>
+                <th>Views</th>
                 <th>Management</th>
             </tr>
         </thead>
@@ -22,6 +23,7 @@
                         <td>@x.ArticleId</td>
                         <td>@x.ArticleTitle</td>
                         <td>@x.CreatedAt.ToString("MM/dd/yyyy")</td>
+                        <td>@x.ViewCount</td>
                         <td>
                             <a href="/Article/Delete/@x.ArticleId" class="btn btn-danger">
                                 <i class="fa-solid fa-trash"></i>

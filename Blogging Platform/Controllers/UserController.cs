@@ -193,10 +193,29 @@ namespace Blogging_Platform.Controllers
         [Authorize]
         public async Task<ActionResult> Followers()
         {
-            var currentUser = await userManager.GetUserAsync(User);
-            var list = dbContext.Follows.Where(f => f.FolloweeId == currentUser.Id).ToList();
+            var CurrentUser = await userManager.GetUserAsync(User);
+            var FollowersIdCollection = dbContext.Follows
+                .Where(f => f.FolloweeId == CurrentUser.Id)
+                .Select(f => f.FollowerId)
+                .ToList();
 
-            return View();
+            List<AppUser> ListofUsers = new List<AppUser>();
+
+            if (FollowersIdCollection.Any())
+            {
+                ListofUsers = dbContext.Users
+                    .Where(u => FollowersIdCollection.Contains(u.Id))
+                    .ToList();
+            }
+
+            return View(ListofUsers);
+        }
+
+        [HttpGet]
+        [Authorize]
+        public async Task<ActionResult> Activities() {
+            var CurrentUser = await userManager.GetUserAsync(User);
+            return View(dbContext.Actions.Where(a => a.UserId == CurrentUser.Id).ToList());
         }
     }
 }
