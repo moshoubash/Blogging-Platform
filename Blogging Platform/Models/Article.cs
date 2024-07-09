@@ -27,6 +27,9 @@ namespace Blogging_Platform.Models
 
         // list from like class
         public List<Like>? Likes { get; set; }
+        
+        // list from bookmark class
+        public List<Bookmark>? Bookmarks { get; set; }
 
         // reference for category class
         public int CategoryId { get; set; }

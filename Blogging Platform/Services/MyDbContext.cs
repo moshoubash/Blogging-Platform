@@ -84,6 +84,18 @@ namespace Blogging_Platform.Services
                         .HasOne(u => u.AppUser)
                         .WithMany(a => a.Actions)
                         .HasForeignKey(b => b.UserId);
+
+            // one-to-many
+
+            modelBuilder.Entity<Bookmark>()
+                        .HasOne(u => u.User)
+                        .WithMany(a => a.Bookmarks)
+                        .HasForeignKey(b => b.UserId);
+
+            modelBuilder.Entity<Bookmark>()
+                        .HasOne(u => u.Article)
+                        .WithMany(a => a.Bookmarks)
+                        .HasForeignKey(b => b.ArticleId);
         }
 
         public DbSet<Article> Articles { get; set;} 
@@ -95,5 +107,6 @@ namespace Blogging_Platform.Services
         public DbSet<Models.Action> Actions { get; set; }
         public DbSet<Country> Countries { get; set; }
         public DbSet<Follow> Follows { get; set; }
+        public DbSet<Bookmark> Bookmarks { get; set; }
     }
 }

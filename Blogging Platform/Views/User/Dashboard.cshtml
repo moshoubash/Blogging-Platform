@@ -63,7 +63,7 @@
                     </div>
                     <canvas id="myBarChart" width="367" height="183" class="chartjs-render-monitor" style="display: block; width: 367px; height: 183px;"></canvas>
                 </div>
-                <div class="card-footer small text-muted">Updated yesterday at 11:59 PM</div>
+                <div class="card-footer small text-muted">Updated Today at @DateTime.Now.ToString("HH:mm")</div>
             </div>
     </div>
     <div class="col-lg-6">
@@ -83,7 +83,38 @@
                     </div>
                     <canvas id="myPieChart" width="367" height="183" class="chartjs-render-monitor" style="display: block; width: 367px; height: 183px;"></canvas>
                 </div>
-                <div class="card-footer small text-muted">Updated yesterday at 11:59 PM</div>
+            <div class="card-footer small text-muted">Updated Today at @DateTime.Now.ToString("HH:mm")</div>
             </div>
+    </div>
+</div>
+
+@*  Articles  *@
+<div class="card">
+    <div class="card-header">
+        <i class="fa-solid fa-file"></i> Articles
+    </div>
+
+    <div class="card-body">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Title</th>
+                    <th>Date</th>
+                    <th>Views</th>
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    foreach (var a in ViewBag.UserArticles)
+                    {
+                        <tr>
+                            <td>@a.ArticleTitle</td>
+                            <td>@a.CreatedAt</td>
+                            <td>@a.ViewCount</td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
     </div>
 </div>

@@ -49,7 +49,8 @@ namespace Blogging_Platform.Controllers
                 }
             }
             ViewBag.ArticlesViewsNumber = Counter;
-            
+
+            ViewBag.UserArticles = (from a in dbContext.Articles where a.UserId == CurrentUser.Id select a).ToList();
             return View();
         }
 
@@ -163,7 +164,7 @@ namespace Blogging_Platform.Controllers
                 var action = new Models.Action
                 {
                     ActionTime = DateTime.Now,
-                    ActionType = "Follow",
+                    ActionType = $"Follow {id}",
                     UserId = userId,
                     UserFullName = (from u in dbContext.Users where u.Id == userId select u).FirstOrDefault().FullName
                 };
@@ -178,7 +179,7 @@ namespace Blogging_Platform.Controllers
                 var action = new Models.Action
                 {
                     ActionTime = DateTime.Now,
-                    ActionType = "Unfollow",
+                    ActionType = $"Unfollow {id}",
                     UserId = userId,
                     UserFullName = (from u in dbContext.Users where u.Id == userId select u).FirstOrDefault().FullName
                 };
