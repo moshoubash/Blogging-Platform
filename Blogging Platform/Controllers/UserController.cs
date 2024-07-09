@@ -218,5 +218,28 @@ namespace Blogging_Platform.Controllers
             var CurrentUser = await userManager.GetUserAsync(User);
             return View(dbContext.Actions.Where(a => a.UserId == CurrentUser.Id).ToList());
         }
+
+        [HttpGet]
+        [Authorize]
+        public async Task<ActionResult> Bookmarks() {
+            var currentUser = await userManager.GetUserAsync(User);
+            var list = (from b in dbContext.Bookmarks where b.UserId == currentUser.Id select b).ToList();
+
+            var ArticlesIdCollection = dbContext.Bookmarks
+                .Where(b => b.UserId == currentUser.Id)
+                .Select(b => b.ArticleId)
+                .ToList();
+
+            List<Article> ListOfArticles = new List<Article>();
+
+            if (ArticlesIdCollection.Any())
+            {
+                ListOfArticles = dbContext.Articles
+                    .Where(a => ArticlesIdCollection.Contains(a.ArticleId))
+                    .ToList();
+            }
+
+            return View(ListOfArticles);
+        }
     }
 }

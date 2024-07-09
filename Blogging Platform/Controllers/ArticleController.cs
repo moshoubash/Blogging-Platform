@@ -380,5 +380,52 @@ namespace Blogging_Platform.Controllers
             await dbContext.SaveChangesAsync();
             return Redirect($"/Article/Details/{reply.ArticleId}");
         }
+
+        [Authorize]
+        public async Task<ActionResult> Bookmark(int ArticleId) {
+            var currentUser = await userManager.GetUserAsync(User);
+            var newBookmark = new Bookmark {
+                ArticleId = ArticleId,
+                UserId = currentUser.Id
+            };
+            dbContext.Bookmarks.Add(newBookmark);
+
+            var action = new Models.Action
+            {
+                ActionTime = DateTime.Now,
+                ActionType = "Add Bookmark",
+                UserId = currentUser.Id,
+                UserFullName = currentUser.FullName
+            };
+
+            dbContext.Actions.Add(action);
+            dbContext.SaveChangesAsync();
+            
+            return Redirect($"/Article/Details/{ArticleId}");
+        }
+
+        // POST: ArticleController/Delete/5
+        [Authorize(Roles = "user")]
+        public async Task<ActionResult> DeleteBookmark(int id)
+        {
+            var user = await userManager.GetUserAsync(User);
+
+            // Delete action to actions table
+            var action = new Models.Action
+            {
+                ActionTime = DateTime.Now,
+                ActionType = "Delete Bookmark",
+                UserId = user.Id,
+                UserFullName = user.FullName
+            };
+
+            dbContext.Actions.Add(action);
+
+            var targetBookmark = (from b in dbContext.Bookmarks where b.UserId == user.Id && b.ArticleId == id select b).FirstOrDefault();
+            dbContext.Bookmarks.Remove(targetBookmark);
+                
+            dbContext.SaveChangesAsync();
+            return Redirect("/User/Bookmarks");
+        }
     }
 }

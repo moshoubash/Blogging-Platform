@@ -43,6 +43,12 @@
                     @*Views number*@
                     <p class="btn btn-dark"><i class="fa-solid fa-eye"></i> @Model.ViewCount</p>
 
+                    @*Bookmark*@
+                    <form action="/Article/Bookmark">
+                        <input class="form-control" type="hidden" name="ArticleId" value="@Model.ArticleId"/>
+                        <button type="submit" class="btn btn-outline-danger"><i class="fa-solid fa-bookmark"></i></button>
+                    </form>
+
                     @*Article Content*@
                     @Html.Raw(@Model.ArticleContent)
 

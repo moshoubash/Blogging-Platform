@@ -1,0 +1,33 @@
+﻿@{
+    ViewData["Title"] = "Bookmarks";
+    Layout = "/Views/Shared/_UserDashboard.cshtml";
+}
+
+<h1>Bookmarks</h1>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Article Title</th>
+            <th>Article Writer</th>
+            <th>Delete Bookmark</th>
+            <th>Read Article</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        @{
+            foreach (var a in Model)
+            {
+                <td>@a.ArticleTitle</td>
+                <td>@a.UserFullName</td>
+                <td>
+                    <a class="btn btn-danger" href="/Article/DeleteBookmark/@a.ArticleId">Delete</a>
+                </td>
+                <td>
+                    <a class="btn btn-primary" href="/Article/Details/@a.ArticleId">Read</a>
+                </td>
+            }
+        }
+    </tbody>
+</table>
