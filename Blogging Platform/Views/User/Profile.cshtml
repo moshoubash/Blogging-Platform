@@ -1,8 +1,14 @@
 ﻿@using Blogging_Platform.Models;
+@using Blogging_Platform.Services;
+@using Microsoft.AspNetCore.Identity;
+@inject UserManager<AppUser> userManager;
+@inject MyDbContext dbContext;
 @model AppUser
 @{
     ViewData["Title"] = "Profile";
     Layout = "/Pages/Shared/_Layout.cshtml";
+    var currentUser = await userManager.GetUserAsync(User);
+    
 }
 
 <header class="masthead" style="background-image: url('/assets/img/galaxywallpaper.jpg');">
@@ -17,10 +23,31 @@
                     <br />
 
                     @*Follow and Unfollow*@
-                    <form asp-action="Follow" asp-controller="User" method="post">
-                        <input type="hidden" name="id" value="@Model.Id" />
-                        <button type="submit" class="btn btn-dark" id="add-button">Follow</button>
-                    </form>
+                    @{
+                        if (currentUser.Id == Model.Id)
+                        {
+                            <a class="btn btn-warning" href="/User/Dashboard">Dashboard</a>
+                        }
+                        else
+                        {
+                            var follow = dbContext.Follows.FirstOrDefault(f => f.FollowerId == currentUser.Id && f.FolloweeId == Model.Id);
+                            if (follow == null)
+                            {
+                                <form asp-action="Follow" asp-controller="User" method="post">
+                                    <input type="hidden" name="id" value="@Model.Id" />
+                                    <button type="submit" class="btn btn-dark" id="add-button">Follow</button>
+                                </form>
+                            }
+                            else
+                            {
+                                <form asp-action="Follow" asp-controller="User" method="post">
+                                    <input type="hidden" name="id" value="@Model.Id" />
+                                    <button type="submit" class="btn btn-danger" id="add-button">UnFollow</button>
+                                </form>
+                            }
+
+                        }
+                    }
 
                     <br />
                     <br />

@@ -56,3 +56,21 @@ body {
     color: black;
     background-color: white;
 }
+
+.top-article {
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+}
+
+.top-left-article {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.top-right-article {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}

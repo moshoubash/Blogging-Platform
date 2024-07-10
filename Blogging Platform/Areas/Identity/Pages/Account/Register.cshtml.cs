@@ -30,6 +30,7 @@ namespace Blogging_Platform.Areas.Identity.Pages.Account
         private readonly IUserEmailStore<AppUser> _emailStore;
         private readonly ILogger<RegisterModel> _logger;
         private readonly IEmailSender _emailSender;
+        private readonly IWebHostEnvironment webHostEnvironment;
 
         public RegisterModel(
             UserManager<AppUser> userManager,
@@ -108,13 +109,14 @@ namespace Blogging_Platform.Areas.Identity.Pages.Account
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
             if (ModelState.IsValid)
             {
-                var user = new AppUser() { 
+                var user = new AppUser() {
                     FullName = Input.FullName,
                     CreatedAt = DateTime.Now,
                     Email = Input.Email,
                     PhoneNumber = Input.PhoneNumber,
-                    UserName = Input.Email
-                };
+                    UserName = Input.Email,
+                    ProfilePicture = "defaultuserprofilepicture.png"
+            };
 
                 /*await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
                 await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);*/
@@ -123,7 +125,6 @@ namespace Blogging_Platform.Areas.Identity.Pages.Account
                 if (result.Succeeded)
                 {
                     _logger.LogInformation("User created a new account with password.");
-
                     await _userManager.AddToRoleAsync(user, "user");
 
                     var userId = await _userManager.GetUserIdAsync(user);

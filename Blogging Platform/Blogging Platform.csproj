@@ -24,7 +24,6 @@
   <ItemGroup>
     <Folder Include="wwwroot\ArticleThumbnails\" />
     <Folder Include="wwwroot\dashboard\" />
-    <Folder Include="wwwroot\ProfilePictures\" />
   </ItemGroup>
 
 </Project>

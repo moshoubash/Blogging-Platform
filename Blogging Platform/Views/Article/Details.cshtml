@@ -33,28 +33,36 @@
         <div class="container px-4 px-lg-5">
             <div class="row gx-4 gx-lg-5 justify-content-center">
                 <div class="col-md-10 col-lg-8 col-xl-7">
-                    @*Article Category*@
-                    <a class="btn btn-dark" href="/Category/Articles/@Model.CategoryId">@ViewBag.ArticleCategory</a>
-                    
-                    @*Like*@
-                    <form id="likeForm" action="/Article/ToggleLike/" method="post" style="display:inline-block;">
-                        <input type="hidden" name="ArticleId" value="@Model.ArticleId" />
-                        <button type="submit" class="btn btn-primary" id="likeButton">
-                            <i class="fa-solid fa-thumbs-up"></i> <span id="likeCount">@(Model.Likes?.Count ?? 0)</span>
-                        </button>
-                    </form>
+                    <div class="top-article">
+                        <div class="top-left-article">
+                            @*Article Category*@
+                            <a class="btn btn-dark" href="/Category/Articles/@Model.CategoryId">@ViewBag.ArticleCategory</a>
 
-                    @*Views number*@
-                    <p class="btn btn-dark"><i class="fa-solid fa-eye"></i> @Model.ViewCount</p>
+                            @*Views number*@
+                            <p class="btn btn-outline-dark"><i class="fa-solid fa-eye"></i> @Model.ViewCount</p>
+                        </div>
+                        
+                        <div class="top-right-article">
+                            @*Like*@
+                            <form id="likeForm" action="/Article/ToggleLike/" method="post" style="display:inline-block;">
+                                <input type="hidden" name="ArticleId" value="@Model.ArticleId" />
+                                <button type="submit" class="btn btn-primary" id="likeButton">
+                                    <i class="fa-solid fa-thumbs-up"></i> <span id="likeCount">@(Model.Likes?.Count ?? 0)</span>
+                                </button>
+                            </form>
+                            
+                            @*Bookmark*@
 
-                    @*Bookmark*@
-                    <form action="/Article/Bookmark">
-                        <input class="form-control" type="hidden" name="ArticleId" value="@Model.ArticleId"/>
-                        <button type="submit" class="btn btn-outline-danger"><i class="fa-solid fa-bookmark"></i></button>
-                    </form>
+                            <form action="/Article/Bookmark">
+                                <input class="form-control" type="hidden" name="ArticleId" value="@Model.ArticleId" />
+                                <button type="submit" class="btn btn-outline-primary"><i class="fa-solid fa-bookmark"></i></button>
+                            </form>
+                        </div>
+                    </div>
 
                     @*Article Content*@
-                    @Html.Raw(@Model.ArticleContent)
+                    
+		    @Html.Raw(@Model.ArticleContent)
 
                     @*Comment*@
                     

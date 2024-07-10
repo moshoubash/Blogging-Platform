@@ -85,7 +85,7 @@ namespace Blogging_Platform.Controllers
                     currentUser.ProfilePicture = guid + ProfilePicture.FileName;
                 }
                 else {
-                    currentUser.ProfilePicture = "f5159dbc-0166-4ef6-838b-98e236a401c140010.jpg";
+                    currentUser.ProfilePicture = "defaultuserprofilepicture.png";
                 }
 
                 var user = await userManager.GetUserAsync(User);
