@@ -1,4 +1,8 @@
 ﻿@using Blogging_Platform.Models;
+@using Microsoft.AspNetCore.Identity;
+@using Blogging_Platform.Services;
+@inject MyDbContext dbContext;
+@inject UserManager<AppUser> userManager;
 @model Article
 @{
     ViewData["Title"] = "Details";

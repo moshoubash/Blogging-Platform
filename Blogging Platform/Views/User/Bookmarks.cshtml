@@ -19,14 +19,16 @@
         @{
             foreach (var a in Model)
             {
-                <td>@a.ArticleTitle</td>
-                <td>@a.UserFullName</td>
-                <td>
-                    <a class="btn btn-danger" href="/Article/DeleteBookmark/@a.ArticleId">Delete</a>
-                </td>
-                <td>
-                    <a class="btn btn-primary" href="/Article/Details/@a.ArticleId">Read</a>
-                </td>
+                <tr>
+                    <td>@a.ArticleTitle</td>
+                    <td>@a.UserFullName</td>
+                    <td>
+                        <a class="btn btn-danger" href="/Article/DeleteBookmark/@a.ArticleId">Delete</a>
+                    </td>
+                    <td>
+                        <a class="btn btn-primary" href="/Article/Details/@a.ArticleId">Read</a>
+                    </td>
+                </tr>
             }
         }
     </tbody>

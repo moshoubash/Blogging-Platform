@@ -172,7 +172,6 @@ namespace Blogging_Platform.Controllers
             }
             else
             {
-                ViewBag.UserAlreadyLike = true;
                 // Unfollow logic
                 dbContext.Follows.Remove(follow);
 

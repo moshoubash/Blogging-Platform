@@ -404,7 +404,7 @@ namespace Blogging_Platform.Controllers
             return Redirect($"/Article/Details/{ArticleId}");
         }
 
-        // POST: ArticleController/Delete/5
+        // POST: ArticleController/DeleteBookmark/5
         [Authorize(Roles = "user")]
         public async Task<ActionResult> DeleteBookmark(int id)
         {
