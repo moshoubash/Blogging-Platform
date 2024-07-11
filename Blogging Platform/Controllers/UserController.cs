@@ -30,7 +30,8 @@ namespace Blogging_Platform.Controllers
 
         // GET: UserController
         // show analysis of the user account
-        [Authorize]
+
+        [Authorize(Roles = "user")]
         public async Task<ActionResult> Dashboard()
         {
             var CurrentUser = await userManager.GetUserAsync(User);
@@ -56,7 +57,8 @@ namespace Blogging_Platform.Controllers
 
         // GET: UserController/Settings/
         // configure profile settings
-        [Authorize]
+
+        [Authorize(Roles = "user")]
         public async Task<ActionResult> Settings()
         {
             ViewBag.Country = new SelectList(dbContext.Countries, "Id", "Name");
@@ -66,7 +68,7 @@ namespace Blogging_Platform.Controllers
         }
 
         [HttpPost]
-        [Authorize]
+        [Authorize(Roles = "user")]
         public async Task<ActionResult> Settings(AppUser currentUser, IFormFile ProfilePicture)
         {
             try
@@ -137,7 +139,7 @@ namespace Blogging_Platform.Controllers
         }
 
         [HttpPost]
-        [Authorize]
+        [Authorize(Roles = "user")]
         public async Task<IActionResult> Follow(string? id)
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier); // current user
@@ -190,7 +192,7 @@ namespace Blogging_Platform.Controllers
         }
 
         [HttpGet]
-        [Authorize]
+        [Authorize(Roles = "user")]
         public async Task<ActionResult> Followers()
         {
             var CurrentUser = await userManager.GetUserAsync(User);
@@ -212,14 +214,14 @@ namespace Blogging_Platform.Controllers
         }
 
         [HttpGet]
-        [Authorize]
+        [Authorize(Roles = "user")]
         public async Task<ActionResult> Activities() {
             var CurrentUser = await userManager.GetUserAsync(User);
             return View(dbContext.Actions.Where(a => a.UserId == CurrentUser.Id).ToList());
         }
 
         [HttpGet]
-        [Authorize]
+        [Authorize(Roles = "user")]
         public async Task<ActionResult> Bookmarks() {
             var currentUser = await userManager.GetUserAsync(User);
             var list = (from b in dbContext.Bookmarks where b.UserId == currentUser.Id select b).ToList();

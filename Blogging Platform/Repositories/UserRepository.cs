@@ -13,6 +13,11 @@ namespace Blogging_Platform.Repositories
             this.dbContext = dbContext;
         }
 
+        List<AppUser> IUserRepository.GetUsers()
+        {
+            return dbContext.Users.ToList();
+        }
+
         void IUserRepository.UpdateUser(string id, AppUser appUser)
         {
             var targetUser = (from u in dbContext.Users 

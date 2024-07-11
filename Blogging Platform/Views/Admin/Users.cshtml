@@ -1,0 +1,119 @@
+﻿@using Microsoft.AspNetCore.Identity;
+@inject UserManager<Models.AppUser> userManager;
+@model List<Models.AppUser>
+@{
+    ViewData["Title"] = "Manage Users";
+    Layout = "/Views/Shared/_AdminDashboard.cshtml";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Profile Picture</th>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>Role</th>
+            <th>Age</th>
+            <th>Gender</th>
+            <th>Created At</th>
+            <th>Email</th>
+            <th>Phone Number</th>
+            <th>Manage</th>
+        </tr>
+    </thead>
+    <tbody>
+        @{
+            foreach (var u in Model)
+            {
+                <tr>
+                    <td><img src="/ProfilePictures/@u.ProfilePicture" width="50px"/></td>
+                    <td>@u.FirstName</td>
+                    <td>@u.LastName</td>
+                    <td>
+                        @{
+                            if (userManager.GetRolesAsync(u).Result.Contains("user"))
+                            {
+                                <p class="badge bg-primary">User</p>
+                            }
+                            else
+                            {
+                                <p class="badge bg-dark">Admin</p>
+                            }
+                        }
+                    </td>
+                    <td>@u.Age</td>
+                    <td>@u.Gender</td>
+                    <td>@u.CreatedAt.ToString("MM/dd/yyyy")</td>
+                    <td>@u.Email</td>
+                    <td>@u.PhoneNumber</td>
+                    <td>
+                        <a href="/Admin/DeleteUser/@u.Id" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#delete-modal"><i class="fa-solid fa-trash"></i></a>
+                        <a href="/Admin/UserDetails" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#details-modal"><i class="fa-solid fa-circle-info"></i></a>
+                        <a href="/Admin/EditUser" class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#edit-modal"><i class="fa-solid fa-pen-to-square"></i></a>
+                    </td>
+                </tr>
+
+                <!-- Delete Modal -->
+                <div class="modal fade" id="delete-modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel">Warning!</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                Are you sure to delete @u.FullName?
+                            </div>
+                            <div class="modal-footer">
+                                <button type="submit" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                <a href="/Admin/DeleteUser/@u.Id" class="btn btn-danger">Delete</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Edit Modal -->
+                <div class="modal fade" id="edit-modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel">Warning!</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <form action="/Admin/EditUser">
+                                    <input type="hidden" value="@u.Id"/>
+                                    <label class="form-label">User Email</label>
+                                    <input class="form-control" type="text"/>
+                                    <div class="modal-footer">
+                                        <button class="btn btn-primary" type="submit">Submit</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Details Modal -->
+                <div class="modal fade" id="details-modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel">Warning!</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                            </div>
+                            <div class="modal-footer">
+                                <button type="submit" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                <a href="/Admin/DeleteUser/@u.Id" class="btn btn-danger">Delete</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        }
+    </tbody>
+</table>

@@ -26,7 +26,14 @@
                     @{
                         if (currentUser.Id == Model.Id)
                         {
-                            <a class="btn btn-warning" href="/User/Dashboard">Dashboard</a>
+                            if (User.IsInRole("user"))
+                            {
+                                <a class="btn btn-warning" href="/User/Dashboard">Dashboard</a>
+                            }
+                            else
+                            {
+                                <a class="btn btn-warning" href="/Admin/Dashboard">Dashboard</a>
+                            }
                         }
                         else
                         {

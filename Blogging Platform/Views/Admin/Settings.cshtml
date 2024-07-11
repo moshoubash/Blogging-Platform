@@ -1,0 +1,92 @@
+﻿@model Models.AppUser
+@{
+    ViewData["Title"] = "Admin Settings";
+    Layout = "/Views/Shared/_AdminDashboard.cshtml";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<form enctype="multipart/form-data" method="post">
+    @*Full Name*@
+
+    <div class="form-group">
+        <label class="form-label">Full Name</label>
+        <input class="form-control" value="@Model.FullName" type="text" name="FullName" />
+    </div>
+
+    @*Email*@
+
+    <div class="form-group">
+        <label class="form-label">Email</label>
+        <input class="form-control" value="@Model.Email" type="email" name="Email" />
+    </div>
+
+    @*Profile Picture*@
+
+    <div class="form-group">
+        <label class="form-label">Profile Picture</label>
+        <input class="form-control" type="file" name="ProfilePicture" />
+    </div>
+
+    @*First and Last name*@
+
+    <div class="form-group row">
+        <div class="col">
+            <label class="form-label">First Name</label>
+            <input class="form-control" value="@Model.FirstName" type="text" name="FirstName" />
+        </div>
+        <div class="col">
+            <label class="form-label">Last Name</label>
+            <input class="form-control" value="@Model.LastName" type="text" name="LastName" />
+        </div>
+    </div>
+
+    @*Country*@
+
+    <div class="form-group">
+        <label class="form-label">Country</label>
+
+        <select class="form-control" name="Country">
+            @foreach (var item in ViewBag.Country)
+            {
+                <option value="@item.Value">@item.Text</option>
+            }
+        </select>
+    </div>
+
+    @*Phone Number*@
+
+    <div class="form-group">
+        <label class="form-label">Phone Number</label>
+        <input class="form-control" value="@Model.PhoneNumber" type="text" name="PhoneNumber" />
+    </div>
+
+    @*Age*@
+
+    <div class="form-group">
+        <label class="form-label">Age</label>
+        <input class="form-control" value="@Model.Age" min="12" max="99" type="number" name="Age" />
+    </div>
+
+    @*Bio*@
+
+    <div class="form-group">
+        <label class="form-label">Bio</label>
+        <input class="form-control" value="@Model.Bio" type="text" name="Bio" />
+    </div>
+
+    @*Gender*@
+
+    <div class="form-group">
+        <label class="form-label">Gender</label>
+
+        <select class="form-control" name="Gender">
+            <option value="0">Female</option>
+            <option value="1">Male</option>
+        </select>
+    </div>
+
+    <br />
+
+    <button type="submit" class="btn btn-primary">Save Changes</button>
+</form>

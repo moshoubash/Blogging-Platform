@@ -1,0 +1,143 @@
+﻿@using Microsoft.AspNetCore.Identity;
+@inject SignInManager<Models.AppUser> signInManager;
+@inject UserManager<Models.AppUser> userManager;
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Blogging_Platform</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/Blogging_Platform.styles.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/dashboard/css/styles.css" />
+
+    @*Styles*@
+    <style>
+        .container-fluid{
+            padding: 10px 20px;
+        }
+    </style>
+
+    @*QuillJS*@
+    <link rel="stylesheet" href="~/lib/quill/atom-one-dark.min.css" />
+    <link rel="stylesheet" href="~/lib/quill/katex.min.css" />
+    <link rel="stylesheet" href="~/lib/quill/quill.snow.css" />
+    <script src="~/lib/quill/highlight.min.js"></script>
+    <script src="~/lib/quill/katex.min.js"></script>
+    <script src="~/lib/quill/quill.js"></script>
+
+    @*Font-Awesome*@
+    <script src="https://kit.fontawesome.com/02e829add2.js" crossorigin="anonymous"></script>
+
+</head>
+<body>
+    <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
+        <!-- Navbar Brand-->
+        <a class="navbar-brand ps-3" href="/Index">BMS</a>
+        <!-- Sidebar Toggle-->
+        <button class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0" id="sidebarToggle" href="#!"><i class="fas fa-bars"></i> </button>
+        <!-- Navbar-->
+        <ul class="navbar-nav ms-auto ms-md-0 me-3 me-lg-4">
+            <li class="nav-item dropdown">
+                <partial name="_LoginPartial" />
+            </li>
+        </ul>
+    </nav>
+
+    <div id="layoutSidenav">
+        <div id="layoutSidenav_nav">
+            <nav class="sb-sidenav accordion sb-sidenav-light" id="sidenavAccordion">
+                <div class="sb-sidenav-menu">
+                    <div class="nav">
+                        @*Dashboard*@
+                        <div class="sb-sidenav-menu-heading">Main</div>
+                        <a class="nav-link" href="/Admin/Dashboard">
+                            <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
+                            Dashboard
+                        </a>
+
+                        @*Pages*@
+                        <div class="sb-sidenav-menu-heading">Pages</div>
+
+                        <a class="nav-link collapsed" href="/Admin/Users">
+                            <div class="sb-nav-link-icon">
+                                <i class="fa-solid fa-list"></i>
+                            </div>
+                            Users
+                        </a>
+
+                        @*Categories*@
+                        <div class="sb-sidenav-menu-heading">Categories</div>
+
+                        <a class="nav-link collapsed" href="/Admin/Users">
+                            <div class="sb-nav-link-icon">
+                                <i class="fa-solid fa-layer-group"></i>
+                            </div>
+                            Categories
+                        </a>
+
+                        @*Profile*@
+                        <div class="sb-sidenav-menu-heading">Profile</div>
+
+                        <a class="nav-link collapsed" href="/Admin/Settings">
+                            <div class="sb-nav-link-icon">
+                                <i class="fa-solid fa-gear"></i>
+                            </div>
+                            Settings
+                        </a>
+                    </div>
+                </div>
+                <div class="sb-sidenav-footer">
+                    <div class="small">Logged in as: 
+                        @{
+                            if (User.IsInRole("user"))
+                            {
+                                <p>Blogger (User)</p>
+                            }
+                            else
+                            {
+                                <p>Admin</p>    
+                            }
+                        }
+                    </div>
+                </div>
+            </nav>
+        </div>
+        <div id="layoutSidenav_content">
+            <main>
+                <div class="container-fluid">
+                    @RenderBody()
+                </div>
+            </main>
+
+            <footer class="py-4 bg-light mt-auto">
+                <div class="container-fluid px-4">
+                    <div class="d-flex align-items-center justify-content-between small">
+                        <div class="text-muted">Copyright © BMS 2024</div>
+                        <div>
+                            <a href="/Privacy">Privacy Policy</a>
+                            ·
+                            <a href="#">Terms &amp; Conditions</a>
+                        </div>
+                    </div>
+                </div>
+            </footer>
+        </div>
+    </div>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="~/dashboard/js/scripts.js"></script>
+    @*Charts*@
+   
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js" crossorigin="anonymous"></script>
+    <script src="~/assets/demo/chart-area-demo.js"></script>
+    <script src="~/assets/demo/chart-bar-demo.js"></script>
+    <script src="~/assets/demo/chart-pie-demo.js"></script>
+    
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>
