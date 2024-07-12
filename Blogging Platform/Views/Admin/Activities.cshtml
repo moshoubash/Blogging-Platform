@@ -1,0 +1,30 @@
+﻿@model List<Models.Action>
+@{
+    ViewData["Title"] = "Activities";
+    Layout = "/Views/Shared/_AdminDashboard.cshtml";
+}
+
+<h1>Activities</h1>
+
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Type</th>
+            <th>Date</th>
+        </tr>
+    </thead>
+    <tbody>
+        @{
+            foreach (var a in Model)
+            {
+                <tr>
+                    <td>@a.ActionId</td>
+                    <td>@a.ActionType</td>
+                    <td>@a.ActionTime</td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>

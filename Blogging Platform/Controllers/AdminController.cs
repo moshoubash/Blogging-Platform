@@ -115,10 +115,12 @@ namespace Blogging_Platform.Controllers
         }
 
         [HttpGet]
-        public ActionResult Activities()
+        public async Task<ActionResult> Activities()
         {
-            return View();
+            var CurrentAdmin = await userManager.GetUserAsync(User);
+            return View(dbContext.Actions.Where(a => a.UserId == CurrentAdmin.Id).ToList());
         }
+
 
         public ActionResult DeleteUser(string? Id)
         {

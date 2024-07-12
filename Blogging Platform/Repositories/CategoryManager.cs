@@ -11,8 +11,12 @@ namespace Blogging_Platform.Repositories
         {
             this.dbContext = dbContext;
         }
-        void ICategoryManager.CreateCategory(Category category)
+        void ICategoryManager.CreateCategory(string? CategoryName)
         {
+            var category = new Category { 
+                CategoryName = CategoryName
+            };
+
             dbContext.Categories.Add(category);
             dbContext.SaveChanges();
         }

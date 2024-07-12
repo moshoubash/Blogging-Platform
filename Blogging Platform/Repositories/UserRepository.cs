@@ -13,6 +13,13 @@ namespace Blogging_Platform.Repositories
             this.dbContext = dbContext;
         }
 
+        List<AppUser> IUserRepository.GetSearchUsers(string s)
+        {
+            return (from u in dbContext.Users
+                    where u.Email.Contains(s) || u.PhoneNumber.Contains(s) || u.FullName.Contains(s)
+                    select u).ToList();
+        }
+
         List<AppUser> IUserRepository.GetUsers()
         {
             return dbContext.Users.ToList();

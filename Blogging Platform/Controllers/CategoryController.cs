@@ -43,22 +43,14 @@ namespace Blogging_Platform.Controllers
             return View(categoryViewModel);
         }
 
-        // GET: CategoryController/Create
+
         [Authorize(Roles = "admin")]
-        public ActionResult Create()
-        {
-            return View();
-        }
-        // POST: CategoryController/Create
-        [Authorize(Roles = "admin")]
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Create(Category category)
+        public ActionResult Create(string? CategoryName)
         {
             try
             {
-                categoryManager.CreateCategory(category);
-                return RedirectToAction(nameof(Index));
+                categoryManager.CreateCategory(CategoryName);
+                return Redirect("/Admin/Categories");
             }
             catch
             {
@@ -72,7 +64,7 @@ namespace Blogging_Platform.Controllers
             try
             {
                 categoryManager.DeleteCategory(id);
-                return RedirectToAction(nameof(Index));
+                return Redirect("/Admin/Categories");
             }
             catch
             {

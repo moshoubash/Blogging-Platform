@@ -1,0 +1,71 @@
+﻿@model List<Models.Category>
+@{
+    ViewData["Title"] = "Categories management";
+    Layout = "/Views/Shared/_AdminDashboard.cshtml";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<a class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#create-modal">Create new category</a>
+
+<table class="table table-striped">
+    <thead>
+        <th>Category Name</th>
+        <th>Actons</th>
+    </thead>
+    <tbody>
+        @{
+            foreach (var c in Model)
+            {
+                <tr>
+                    <td>@c.CategoryName</td>
+
+                    <td>
+                        <a class="btn btn-dark" href="/Category/Articles/@c.CategoryId">Articles</a>
+                        <a class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#delete-modal">Delete</a>
+                    </td>
+                </tr>
+                <!-- Delete MODAL -->
+                <div class="modal fade" id="delete-modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel">Warning!</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <p>Do you want to delete @c.CategoryName ?</p>
+                            </div>
+                            <div class="modal-footer">
+                                <a class="btn btn-danger" href="/Category/Delete/@c.CategoryId">Delete</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        }
+    </tbody>
+</table>
+<!-- CREATE MODAL -->
+<div class="modal fade" id="create-modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Create new category</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form action="/Category/Create" method="post">
+                    <div class="form-group">
+                        <label class="form-label">Category Name</label>
+                        <input type="text" class="form-control" name="CategoryName" />
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary">Create</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
