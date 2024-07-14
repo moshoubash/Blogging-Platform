@@ -242,5 +242,29 @@ namespace Blogging_Platform.Controllers
 
             return View(ListOfArticles);
         }
+
+        [HttpGet]
+        public ActionResult ChangePassword()
+        {
+            return View();
+        }
+        [HttpPost]
+        public async Task<ActionResult> ChangePassword(string password, string newPassword)
+        {
+            var currentUser = await userManager.GetUserAsync(User);
+
+            if (currentUser == null)
+            {
+                return NotFound("user not found");
+            }
+
+            if (await userManager.CheckPasswordAsync(currentUser, newPassword) == false)
+            {
+                return BadRequest("password given is not valid");
+            }
+
+            await userManager.ChangePasswordAsync(currentUser, password, newPassword);
+            return Redirect("/User/ChangePassword");
+        }
     }
 }

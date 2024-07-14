@@ -21,27 +21,10 @@
                     <td>@c.CategoryName</td>
 
                     <td>
-                        <a class="btn btn-dark" href="/Category/Articles/@c.CategoryId">Articles</a>
-                        <a class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#delete-modal">Delete</a>
+                        <a class="btn btn-dark" href="/Category/Articles/@c.CategoryId"><i class="fa-solid fa-list"></i></a>
+                        <a class="btn btn-danger" href="/Category/Delete/@c.CategoryId"><i class="fa-solid fa-trash"></i></a>
                     </td>
                 </tr>
-                <!-- Delete MODAL -->
-                <div class="modal fade" id="delete-modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                    <div class="modal-dialog">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title" id="exampleModalLabel">Warning!</h5>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                            </div>
-                            <div class="modal-body">
-                                <p>Do you want to delete @c.CategoryName ?</p>
-                            </div>
-                            <div class="modal-footer">
-                                <a class="btn btn-danger" href="/Category/Delete/@c.CategoryId">Delete</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
             }
         }
     </tbody>

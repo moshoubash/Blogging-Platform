@@ -1,5 +1,6 @@
 ﻿@using Microsoft.AspNetCore.Identity;
 @inject UserManager<Models.AppUser> userManager;
+@inject Services.MyDbContext dbContext;
 @model List<Models.AppUser>
 @{
     ViewData["Title"] = "Manage Users";
@@ -8,14 +9,20 @@
 
 <h1>@ViewData["Title"]</h1>
 
+<a class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#create-modal">Create User</a>
+
+<br />
+<br />
+
 <table class="table table-striped">
     <thead>
-        <tr>
+        <tr class="bg-dark text-white">
             <th>Profile Picture</th>
             <th>First Name</th>
             <th>Last Name</th>
             <th>Role</th>
             <th>Age</th>
+            <th class="text-center">Statistics</th>
             <th>Gender</th>
             <th>Created At</th>
             <th>Email</th>
@@ -44,76 +51,62 @@
                         }
                     </td>
                     <td>@u.Age</td>
+                    <td>
+                        <p class="badge bg-success" id="articles">Articles @dbContext.Articles.Where(a => a.UserId == u.Id).ToList().Count</p>
+                        <p class="badge bg-warning" id="actions">Actions @dbContext.Actions.Where(a => a.UserId == u.Id).ToList().Count</p>
+                        <p class="badge bg-dark" id="comments">Comments @dbContext.Comments.Where(c => c.UserId == u.Id).ToList().Count</p>
+                    </td>
                     <td>@u.Gender</td>
                     <td>@u.CreatedAt.ToString("MM/dd/yyyy")</td>
                     <td>@u.Email</td>
                     <td>@u.PhoneNumber</td>
                     <td>
-                        <a href="/Admin/DeleteUser/@u.Id" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#delete-modal"><i class="fa-solid fa-trash"></i></a>
+                        <a href="/Admin/DeleteUser/@u.Id" class="btn btn-danger"><i class="fa-solid fa-trash"></i></a>
                         <a href="/Admin/UserDetails" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#details-modal"><i class="fa-solid fa-circle-info"></i></a>
                         <a href="/Admin/EditUser" class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#edit-modal"><i class="fa-solid fa-pen-to-square"></i></a>
                     </td>
                 </tr>
-
-                <!-- Delete Modal -->
-                <div class="modal fade" id="delete-modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                    <div class="modal-dialog">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title" id="exampleModalLabel">Warning!</h5>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                            </div>
-                            <div class="modal-body">
-                                Are you sure to delete @u.FullName?
-                            </div>
-                            <div class="modal-footer">
-                                <button type="submit" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                <a href="/Admin/DeleteUser/@u.Id" class="btn btn-danger">Delete</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Edit Modal -->
-                <div class="modal fade" id="edit-modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                    <div class="modal-dialog">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title" id="exampleModalLabel">Warning!</h5>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                            </div>
-                            <div class="modal-body">
-                                <form action="/Admin/EditUser">
-                                    <input type="hidden" value="@u.Id"/>
-                                    <label class="form-label">User Email</label>
-                                    <input class="form-control" type="text"/>
-                                    <div class="modal-footer">
-                                        <button class="btn btn-primary" type="submit">Submit</button>
-                                    </div>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Details Modal -->
-                <div class="modal fade" id="details-modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                    <div class="modal-dialog">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title" id="exampleModalLabel">Warning!</h5>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                            </div>
-                            <div class="modal-body">
-                            </div>
-                            <div class="modal-footer">
-                                <button type="submit" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                <a href="/Admin/DeleteUser/@u.Id" class="btn btn-danger">Delete</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
             }
         }
     </tbody>
 </table>
+
+<!-- Create Modal -->
+<div class="modal fade" id="create-modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Warning!</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form action="/Admin/CreateUser" method="post">
+                    @*Full Name entry*@
+                    <div class="form-outline mb-4">
+                        <label class="form-label">Full Name</label>
+                        <input name="FullName" type="text" class="form-control form-control-lg" required/>
+                    </div>
+
+                    @*Email entry*@
+                    <div class="form-outline mb-4">
+                        <label class="form-label">Email</label>
+                        <input name="Email" type="email" class="form-control form-control-lg" required/>
+                    </div>
+
+                    @*Phone Number entry*@
+                    <div class="form-outline mb-4">
+                        <label class="form-label">Phone Number</label>
+                        <input name="PhoneNumber" class="form-control form-control-lg" required/>
+                    </div>
+
+                    @*  S u b m i t  *@
+
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.BlazorIdentity.Pages.Manage;
 using System.Security.AccessControl;
 
 namespace Blogging_Platform.Controllers
@@ -120,33 +121,98 @@ namespace Blogging_Platform.Controllers
             var CurrentAdmin = await userManager.GetUserAsync(User);
             return View(dbContext.Actions.Where(a => a.UserId == CurrentAdmin.Id).ToList());
         }
-
-
-        public ActionResult DeleteUser(string? Id)
+        public async Task<ActionResult> DeleteUser(string? Id)
         {
-            var targetUser = (from u in dbContext.Users
-                              where u.Id == Id
-                              select u).FirstOrDefault();
-
-            if (targetUser == null)
+            try
             {
-                return NotFound("User not found in database");
-            }
+                var targetUser = (from u in dbContext.Users
+                                  where u.Id == Id
+                                  select u).FirstOrDefault();
 
-            var listOfUserActions = dbContext.Actions.Where(a => a.UserId == Id).ToList();
-
-            if (listOfUserActions != null)
-            {
-                foreach (var action in listOfUserActions)
+                if (targetUser == null)
                 {
-                    dbContext.Actions.Remove(action);
+                    return NotFound("User not found in database");
                 }
+
+                var listOfUserActions = dbContext.Actions.Where(a => a.UserId == Id).ToList();
+
+                if (listOfUserActions != null)
+                {
+                    foreach (var a in listOfUserActions)
+                    {
+                        dbContext.Actions.Remove(a);
+                    }
+                }
+
+                dbContext.Users.Remove(targetUser);
+
+                var admin = await userManager.GetUserAsync(User);
+                var action = new Models.Action
+                {
+                    ActionTime = DateTime.Now,
+                    ActionType = $"Delete user {targetUser.Email}",
+                    UserId = admin.Id,
+                    UserFullName = admin.FullName
+                };
+
+                dbContext.Actions.Add(action);
+
+                dbContext.SaveChanges();
+
+                return Redirect("/Admin/Users");
+            }
+            catch {
+                return BadRequest("You try to delete user who have already data in database");
+            }
+        }
+        public async Task<ActionResult> CreateUser(AppUser user ){
+            await dbContext.Users.AddAsync(user);
+            var token = await userManager.GeneratePasswordResetTokenAsync(user);
+            var password = "User1234@";
+            
+            await userManager.ResetPasswordAsync(user, token, password);
+            await userManager.AddToRoleAsync(user, "user");
+            
+            user.CreatedAt = DateTime.Now;
+            user.ProfilePicture = "defaultuserprofilepicture.png";
+            user.UserName = user.Email;
+            user.NormalizedUserName = user.UserName.ToUpper();
+            user.NormalizedEmail = user.UserName.ToUpper();
+
+            var admin = await userManager.GetUserAsync(User);
+
+            var action = new Models.Action
+            {
+                ActionTime = DateTime.Now,
+                ActionType = $"Create new User {user.Email}",
+                UserId = admin.Id,
+                UserFullName = admin.FullName
+            };
+
+            dbContext.Actions.Add(action);
+
+            await dbContext.SaveChangesAsync();
+            return Redirect("/Admin/Users");
+        }
+        [HttpGet]
+        public ActionResult ChangePassword() {
+            return View();
+        }
+        [HttpPost]
+        public async Task<ActionResult> ChangePassword(string password, string newPassword) {
+            var currentUser = await userManager.GetUserAsync(User);
+
+            if (currentUser == null)
+            {
+                return NotFound("user not found");
             }
 
-            dbContext.Users.Remove(targetUser);
-            dbContext.SaveChanges();
+            if (await userManager.CheckPasswordAsync(currentUser, newPassword) == false) {
+                return BadRequest("password given is not valid");
+            }
 
-            return Redirect("/Admin/Users");
+            await userManager.ChangePasswordAsync(currentUser, password, newPassword);
+            return Redirect("/Admin/ChangePassword");
         }
     }
 }
