@@ -52,6 +52,61 @@ namespace Blogging_Platform.Controllers
             ViewBag.ArticlesViewsNumber = Counter;
 
             ViewBag.UserArticles = (from a in dbContext.Articles where a.UserId == CurrentUser.Id select a).ToList();
+            List<Article> articles = (from a in dbContext.Articles where a.UserId == CurrentUser.Id select a).ToList();
+            var sortedList = articles.OrderByDescending(o => o.ViewCount).ToList();
+
+            if (sortedList.Count >= 4)
+            {
+                ViewBag.Article1Views = sortedList[0].ViewCount;
+                ViewBag.Article2Views = sortedList[1].ViewCount;
+                ViewBag.Article3Views = sortedList[2].ViewCount;
+                ViewBag.Article4Views = sortedList[3].ViewCount;
+
+                ViewBag.Article1Title = sortedList[0].ArticleTitle;
+                ViewBag.Article2Title = sortedList[1].ArticleTitle;
+                ViewBag.Article3Title = sortedList[2].ArticleTitle;
+                ViewBag.Article4Title = sortedList[3].ArticleTitle;
+            }
+            else
+            {
+                // Handle the case where there are fewer than 4 articles
+                ViewBag.Article1Views = 0;
+                ViewBag.Article2Views = 0;
+                ViewBag.Article3Views = 0;
+                ViewBag.Article4Views = 0;
+
+                ViewBag.Article1Title = "N/A";
+                ViewBag.Article2Title = "N/A";
+                ViewBag.Article3Title = "N/A";
+                ViewBag.Article4Title = "N/A";
+            }
+
+            var filteredArticles = (from a in dbContext.Articles
+                            where a.UserId == CurrentUser.Id
+                            select new { a.ArticleTitle, a.ViewCount }).ToList();
+
+            ViewBag.ArticleTitles = articles.Select(a => a.ArticleTitle).ToList();
+            ViewBag.ArticleViewCounts = articles.Select(a => a.ViewCount).ToList();
+
+            // Bar chart
+
+            var articlesGroupedByMonth = dbContext.Articles
+                                            .Where(a => a.UserId == CurrentUser.Id)
+                                            .GroupBy(a => new { a.CreatedAt.Year, a.CreatedAt.Month })
+                                            .Select(g => new {
+                                                Year = g.Key.Year,
+                                                Month = g.Key.Month,
+                                                ArticleCount = g.Count()
+                                            })
+                                            .OrderBy(g => g.Year).ThenBy(g => g.Month) // Optional: order by date
+                                            .ToList();
+
+            ViewBag.MonthLabels = articlesGroupedByMonth
+                .Select(g => new DateTime(g.Year, g.Month, 1).ToString("MMMM yyyy"))
+                .ToList();
+
+            ViewBag.ArticleCounts = articlesGroupedByMonth.Select(g => g.ArticleCount).ToList();
+            
             return View();
         }
 
